@@ -1,0 +1,70 @@
+package org.jenkinsci.plugins.withsoftware;
+
+import hudson.Extension;
+import hudson.Util;
+import jenkins.model.Jenkins;
+import hudson.model.LabelFinder;
+import hudson.model.TaskListener;
+import hudson.model.Computer;
+import hudson.model.Label;
+import hudson.model.Node;
+import hudson.model.labels.LabelAtom;
+import hudson.slaves.ComputerListener;
+import org.jenkinsci.plugins.withsoftware.util.Utils;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Extension
+public class WithSoftwareLabelFinder extends LabelFinder {
+
+  private final Map<Node, Set<LabelAtom>> cashedLabels = new ConcurrentHashMap<Node, Set<LabelAtom>>();
+
+  @Override
+  public Collection<LabelAtom> findLabels(Node node) {
+    Computer computer = node.toComputer();
+    if(computer == null || node.getChannel()==null)
+        return Collections.emptyList();
+
+    Set<LabelAtom> softwares = cashedLabels.get(node);
+    if(softwares == null || softwares.isEmpty()) return Collections.emptyList();
+
+    return softwares;
+  }
+
+  @Extension
+  public static class WithSoftwareComputerListener extends ComputerListener {
+
+    @Override
+    public void onOnline(Computer c, TaskListener taskListener) {
+      Set<LabelAtom> softwares = Utils.detectInstalledSoftwares(c);
+      if (!softwares.isEmpty()) {
+          finder().cashedLabels.put(c.getNode(), softwares);
+      } else {
+          finder().cashedLabels.remove(c.getNode());
+      }
+    }
+
+    @Override
+    public void onConfigurationChange(){
+      WithSoftwareLabelFinder finder = finder();
+
+      Set<Node> cachedNodes = new HashSet<Node>(finder.cashedLabels.keySet());
+      List<Node> realNodes = Jenkins.getInstance().getNodes();
+      for(Node node: cachedNodes){
+        if(!realNodes.contains(node)){
+            finder.cashedLabels.remove(node);
+        }
+      }
+    }
+
+    private WithSoftwareLabelFinder finder() {
+        return LabelFinder.all().get(WithSoftwareLabelFinder.class);
+    }
+  }
+}

@@ -2,16 +2,19 @@ package org.jenkinsci.plugins.withsoftware;
 
 import hudson.Extension;
 import hudson.Launcher;
+import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.model.Node;
+import hudson.model.labels.LabelAtom;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.util.ComboBoxModel;
 import hudson.util.ListBoxModel;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.jenkinsci.plugins.withsoftware.model.Software;
+import org.jenkinsci.plugins.withsoftware.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
@@ -19,29 +22,58 @@ import org.kohsuke.stapler.StaplerRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+@Extension
 public class WithSoftwareBuildWrapper extends BuildWrapper {
 
-  private List<Software> softwareList;
+  private String xcodeVersion;
+  private String unityVersion;
+
+  public WithSoftwareBuildWrapper() {
+    super();
+  }
 
   @DataBoundConstructor
-  public WithSoftwareBuildWrapper(List<Software> softwareList) {
-    this.softwareList = softwareList;
+  public WithSoftwareBuildWrapper(String xcodeVersion, String unityVersion) {
+    this.xcodeVersion = xcodeVersion;
+    this.unityVersion = unityVersion;
   }
 
   @Override
   public Environment setUp(AbstractBuild build, final Launcher launcher, BuildListener listener) {
+    Node node = build.getBuiltOn();
+    SoftwareLabelSet labels = Utils.getSoftwareLabels(node);
+
+    final SoftwareLabelAtom xcodeLabel = labels.getSoftwareLabel("Xcode", xcodeVersion);
+    final SoftwareLabelAtom unityLabel = labels.getSoftwareLabel("Unity", unityVersion);
+
+    if (xcodeVersion != null && xcodeLabel == null) {
+    }
+
+    if (unityVersion != null && unityLabel == null) {
+    }
+
     return new Environment() {
       @Override
       public void buildEnvVars(Map<String, String> env) {
-        env.put("DEVELOPER_DIR", "hoge");
-        env.put("UNITY_DIR", "fuga");
+        if (xcodeLabel != null) {
+          env.put("DEVELOPER_DIR", xcodeLabel.getHome());
+        }
+
+        if (unityLabel != null) {
+          env.put("UNITY_HOME", unityLabel.getHome());
+        }
       }
     };
   }
 
-  public List<Software> getSoftwareList() {
-    return softwareList;
+  public String getXcodeVersion() {
+    return xcodeVersion;
+  }
+
+  public String getUnityVersion() {
+    return unityVersion;
   }
 
   @Extension
@@ -65,23 +97,10 @@ public class WithSoftwareBuildWrapper extends BuildWrapper {
 
     @Override
     public BuildWrapper newInstance(StaplerRequest req, JSONObject json) throws FormException {
-      List<Software> softwareList = new ArrayList<Software>();
+      String xcodeVersion = Util.fixEmptyAndTrim(json.getString("xcodeVersion"));
+      String unityVersion = Util.fixEmptyAndTrim(json.getString("unityVersion"));
 
-      JSONArray softwareArray = json.optJSONArray("software");
-      if (softwareArray != null) {
-        for (Object softwareObj: softwareArray) {
-          JSONObject software = JSONObject.fromObject(softwareObj);
-          softwareList
-              .add(new Software(software.getString("softwareName"), software.getString("softwareVersion")));
-        }
-      } else {
-        JSONObject software = json.optJSONObject("software");
-        if (software != null) {
-          softwareList
-              .add(new Software(software.getString("softwareName"), software.getString("softwareVersion")));
-        }
-      }
-      return new WithSoftwareBuildWrapper(softwareList);
+      return new WithSoftwareBuildWrapper(xcodeVersion, unityVersion);
     }
 
     @Override
@@ -89,16 +108,14 @@ public class WithSoftwareBuildWrapper extends BuildWrapper {
       return true;
     }
 
-    public ListBoxModel doFillSoftwareNameItems() {
-      ListBoxModel items = new ListBoxModel();
-      items.add("Xcode");
-      items.add("Unity");
-      return items;
+    public ComboBoxModel doFillXcodeVersionItems() {
+      SoftwareLabelSet labels = Utils.getSoftwareLabels();
+      return new ComboBoxModel(labels.getXcodeVersions());
     }
 
-    public ComboBoxModel doFillSoftwareVersionItems(@QueryParameter String softwareName) {
-      ComboBoxModel items = new ComboBoxModel();
-      return items;
+    public ComboBoxModel doFillUnityVersionItems() {
+      SoftwareLabelSet labels = Utils.getSoftwareLabels();
+      return new ComboBoxModel(labels.getUnityVersions());
     }
   }
 }

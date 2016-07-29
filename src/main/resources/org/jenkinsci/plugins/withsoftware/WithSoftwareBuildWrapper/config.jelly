@@ -1,19 +1,12 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <f:block>
+    <link href="${rootURL}/plugin/with-software/css/combo-box.css" rel="stylesheet" type="text/css" />
     <table style="margin-left:2em">
-      <f:entry title="Softwares">
-        <f:repeatable var="software" items="${instance.getSoftwareList()}">
-          <table>
-            <f:entry title="Name" field="softwareName">
-              <f:select value="${software.getName()}">
-              </f:select>
-            </f:entry>
-            <f:entry title="Version" field="softwareVersion">
-              <f:combobox value="${software.getVersion()}"/>
-            </f:entry>
-            <f:entry><f:repeatableDeleteButton /></f:entry>
-          </table>
-        </f:repeatable>
+      <f:entry title="Xcode Version: ">
+        <f:combobox field="xcodeVersion" value="${instance.getXcodeVersion()}"/>
+      </f:entry>
+      <f:entry title="Unity Version: ">
+        <f:combobox field="unityVersion" value="${instance.getUnityVersion()}"/>
       </f:entry>
     </table>
   </f:block>
