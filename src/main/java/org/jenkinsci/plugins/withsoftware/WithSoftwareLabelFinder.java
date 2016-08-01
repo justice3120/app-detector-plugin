@@ -10,6 +10,8 @@ import hudson.model.Label;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
 import hudson.slaves.ComputerListener;
+import org.jenkinsci.plugins.withsoftware.task.UnityDetectionTask;
+import org.jenkinsci.plugins.withsoftware.task.XcodeDetectionTask;
 import org.jenkinsci.plugins.withsoftware.util.Utils;
 
 import java.util.Collection;
@@ -42,7 +44,7 @@ public class WithSoftwareLabelFinder extends LabelFinder {
 
     @Override
     public void onOnline(Computer c, TaskListener taskListener) {
-      Set<LabelAtom> softwares = Utils.detectInstalledSoftwares(c);
+      Set<LabelAtom> softwares = detectInstalledSoftwares(c);
       if (!softwares.isEmpty()) {
           finder().cashedLabels.put(c.getNode(), softwares);
       } else {
@@ -65,6 +67,23 @@ public class WithSoftwareLabelFinder extends LabelFinder {
 
     private WithSoftwareLabelFinder finder() {
         return LabelFinder.all().get(WithSoftwareLabelFinder.class);
+    }
+
+    private Set<LabelAtom> detectInstalledSoftwares(Computer computer) {
+      Set<LabelAtom> softwares = new HashSet<LabelAtom>();
+      try {
+        if (computer.isUnix()) {
+          Set<String> serializedSoftwares = new HashSet<String>();
+          serializedSoftwares.addAll(computer.getChannel().call(new XcodeDetectionTask()));
+          serializedSoftwares.addAll(computer.getChannel().call(new UnityDetectionTask()));
+          for (String softwareString: serializedSoftwares) {
+            softwares.add(SoftwareLabelAtom.deserialize(softwareString));
+          }
+        }
+      } catch (Exception e) {
+        System.out.println(e.toString());
+      }
+      return softwares;
     }
   }
 }

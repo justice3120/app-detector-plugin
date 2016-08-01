@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.withsoftware;
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.Util;
@@ -7,6 +8,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Node;
+import hudson.model.Result;
 import hudson.model.labels.LabelAtom;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
@@ -19,6 +21,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,13 @@ public class WithSoftwareBuildWrapper extends BuildWrapper {
 
   @Override
   public Environment setUp(AbstractBuild build, final Launcher launcher, BuildListener listener) {
+    final PrintStream logger = listener.getLogger();
+
+    final Map<String, String> buildVars = build.getBuildVariables();
+
+    String xcodeVersion = Utils.expandVariables(buildVars, this.xcodeVersion);
+    String unityVersion = Utils.expandVariables(buildVars, this.unityVersion);
+
     Node node = build.getBuiltOn();
     SoftwareLabelSet labels = Utils.getSoftwareLabels(node);
 
@@ -49,9 +59,15 @@ public class WithSoftwareBuildWrapper extends BuildWrapper {
     final SoftwareLabelAtom unityLabel = labels.getSoftwareLabel("Unity", unityVersion);
 
     if (xcodeVersion != null && xcodeLabel == null) {
+      logger.println(Messages.XCODE_NOT_FOUND());
+      build.setResult(Result.NOT_BUILT);
+      return null;
     }
 
     if (unityVersion != null && unityLabel == null) {
+      logger.println(Messages.UUNITY_NOT_FOUND());
+      build.setResult(Result.NOT_BUILT);
+      return null;
     }
 
     return new Environment() {
