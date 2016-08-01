@@ -8,12 +8,16 @@ import org.jenkinsci.plugins.withsoftware.util.Utils;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class UnityDetectionTask extends MasterToSlaveCallable<Set<String>, Exception> {
+public final class UnityDetectionTask extends SoftwareDetectionTask {
 
   @Override
   public Set<String> call() throws Exception {
     Set<String> unityList = new HashSet<String>();
     String appDir = "/Applications/";
+
+    if (! isMac()) {
+      return unityList;
+    }
 
     String[] unityPathList = Utils
         .runExternalCommand("ls", appDir, "|", "egrep", "^Unity").split("\n");

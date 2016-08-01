@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
+import java.util.logging.LogManager;
 
 @Extension
 public class WithSoftwareLabelFinder extends LabelFinder {
@@ -70,6 +72,8 @@ public class WithSoftwareLabelFinder extends LabelFinder {
     }
 
     private Set<LabelAtom> detectInstalledSoftwares(Computer computer) {
+      Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
+
       Set<LabelAtom> softwares = new HashSet<LabelAtom>();
       try {
         if (computer.isUnix()) {
@@ -81,7 +85,7 @@ public class WithSoftwareLabelFinder extends LabelFinder {
           }
         }
       } catch (Exception e) {
-        System.out.println(e.toString());
+        logger.warning(Messages.DETECTING_SOFTOWARE_INSTLLATION_FAILED(computer.getDisplayName()));
       }
       return softwares;
     }
