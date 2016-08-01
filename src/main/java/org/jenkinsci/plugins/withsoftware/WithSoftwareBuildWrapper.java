@@ -53,6 +53,13 @@ public class WithSoftwareBuildWrapper extends BuildWrapper {
     String unityVersion = Utils.expandVariables(buildVars, this.unityVersion);
 
     Node node = build.getBuiltOn();
+
+    if (node == null) {
+      logger.println(Messages.GETTING_NODE_FAILED());
+      build.setResult(Result.FAILURE);
+      return null;
+    }
+
     SoftwareLabelSet labels = Utils.getSoftwareLabels(node);
 
     final SoftwareLabelAtom xcodeLabel = labels.getSoftwareLabel("Xcode", xcodeVersion);
