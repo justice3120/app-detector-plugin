@@ -36,10 +36,10 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
           unityVersion = Utils.expandVariables(buildVars, unityVersion);
 
           if (xcodeVersion != null) {
-            actions.add(new MyLabelAssignmentAction("Xcode-" + xcodeVersion));
+            actions.add(new SoftwareLabelAssignmentAction("Xcode-" + xcodeVersion));
           }
           if (unityVersion != null) {
-            actions.add(new MyLabelAssignmentAction("Unity-" + unityVersion));
+            actions.add(new SoftwareLabelAssignmentAction("Unity-" + unityVersion));
           }
         }
       }
@@ -59,10 +59,10 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
     return buildVars;
   }
 
-  private class MyLabelAssignmentAction implements LabelAssignmentAction {
+  private static class SoftwareLabelAssignmentAction implements LabelAssignmentAction {
     private String label;
 
-    public MyLabelAssignmentAction(String label) {
+    public SoftwareLabelAssignmentAction(String label) {
       this.label = label;
     }
 
