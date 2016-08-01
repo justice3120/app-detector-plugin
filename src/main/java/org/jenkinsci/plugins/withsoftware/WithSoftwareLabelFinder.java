@@ -59,7 +59,14 @@ public class WithSoftwareLabelFinder extends LabelFinder {
       WithSoftwareLabelFinder finder = finder();
 
       Set<Node> cachedNodes = new HashSet<Node>(finder.cashedLabels.keySet());
-      List<Node> realNodes = Jenkins.getInstance().getNodes();
+
+      Jenkins jenkins = Jenkins.getInstance();
+
+      if (jenkins == null) {
+        return;
+      }
+
+      List<Node> realNodes = jenkins.getNodes();
       for(Node node: cachedNodes){
         if(!realNodes.contains(node)){
             finder.cashedLabels.remove(node);
@@ -75,8 +82,15 @@ public class WithSoftwareLabelFinder extends LabelFinder {
       Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 
       Set<LabelAtom> softwares = new HashSet<LabelAtom>();
+      Boolean isUnix = computer.isUnix();
+
+      //This computer seems offline. So, skip detection.
+      if (isUnix == null) {
+        return softwares;
+      }
+
       try {
-        if (computer.isUnix()) {
+        if (isUnix) {
           Set<String> serializedSoftwares = new HashSet<String>();
           serializedSoftwares.addAll(computer.getChannel().call(new XcodeDetectionTask()));
           serializedSoftwares.addAll(computer.getChannel().call(new UnityDetectionTask()));

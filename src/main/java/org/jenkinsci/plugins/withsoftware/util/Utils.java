@@ -46,7 +46,13 @@ public class Utils {
   public static SoftwareLabelSet getSoftwareLabels() {
     SoftwareLabelSet softwareLabels = new SoftwareLabelSet();
 
-    List<Node> allNode = Jenkins.getInstance().getNodes();
+    Jenkins jenkins = Jenkins.getInstance();
+
+    if (jenkins == null) {
+      return softwareLabels;
+    }
+
+    List<Node> allNode = jenkins.getNodes();
     for (Node node: allNode) {
       softwareLabels.addAll(getSoftwareLabels(node));
     }
