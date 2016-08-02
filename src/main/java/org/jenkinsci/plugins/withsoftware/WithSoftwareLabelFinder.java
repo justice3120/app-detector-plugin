@@ -45,9 +45,9 @@ public class WithSoftwareLabelFinder extends LabelFinder {
     public void onOnline(Computer c, TaskListener taskListener) {
       Set<LabelAtom> softwares = detectInstalledSoftwares(c);
       if (!softwares.isEmpty()) {
-          finder().cashedLabels.put(c.getNode(), softwares);
+        finder().cashedLabels.put(c.getNode(), softwares);
       } else {
-          finder().cashedLabels.remove(c.getNode());
+        finder().cashedLabels.remove(c.getNode());
       }
     }
 
@@ -66,13 +66,13 @@ public class WithSoftwareLabelFinder extends LabelFinder {
       List<Node> realNodes = jenkins.getNodes();
       for (Node node: cachedNodes) {
         if (!realNodes.contains(node)) {
-            finder.cashedLabels.remove(node);
+          finder.cashedLabels.remove(node);
         }
       }
     }
 
     private WithSoftwareLabelFinder finder() {
-        return LabelFinder.all().get(WithSoftwareLabelFinder.class);
+      return LabelFinder.all().get(WithSoftwareLabelFinder.class);
     }
 
     private Set<LabelAtom> detectInstalledSoftwares(Computer computer) {
