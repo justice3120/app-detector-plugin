@@ -46,12 +46,12 @@ public class WithSoftwareLabelFinder extends LabelFinder {
   public static class WithSoftwareComputerListener extends ComputerListener {
 
     @Override
-    public void onOnline(Computer c, TaskListener taskListener) {
-      Set<LabelAtom> softwares = detectInstalledSoftwares(c);
+    public void onOnline(Computer computer, TaskListener taskListener) {
+      Set<LabelAtom> softwares = detectInstalledSoftwares(computer);
       if (!softwares.isEmpty()) {
-        finder().cashedLabels.put(c.getNode(), softwares);
+        finder().cashedLabels.put(computer.getNode(), softwares);
       } else {
-        finder().cashedLabels.remove(c.getNode());
+        finder().cashedLabels.remove(computer.getNode());
       }
     }
 

@@ -20,9 +20,9 @@ import java.util.Map;
 @Extension(ordinal = -100)
 public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
   @Override
-  public boolean shouldSchedule(Queue.Task p, List<Action> actions) {
-    if (p instanceof Project) {
-      List<BuildWrapper> buildWapperList = ((Project)p).getBuildWrappersList();
+  public boolean shouldSchedule(Queue.Task task, List<Action> actions) {
+    if (task instanceof Project) {
+      List<BuildWrapper> buildWapperList = ((Project)task).getBuildWrappersList();
 
       for (BuildWrapper bw: buildWapperList) {
         if (bw instanceof WithSoftwareBuildWrapper) {
