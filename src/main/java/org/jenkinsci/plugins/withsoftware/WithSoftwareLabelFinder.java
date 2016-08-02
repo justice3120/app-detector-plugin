@@ -30,11 +30,14 @@ public class WithSoftwareLabelFinder extends LabelFinder {
   @Override
   public Collection<LabelAtom> findLabels(Node node) {
     Computer computer = node.toComputer();
-    if (computer == null || node.getChannel() == null)
-        return Collections.emptyList();
+    if (computer == null || node.getChannel() == null) {
+      return Collections.emptyList();
+    }
 
     Set<LabelAtom> softwares = cashedLabels.get(node);
-    if (softwares == null || softwares.isEmpty()) return Collections.emptyList();
+    if (softwares == null || softwares.isEmpty()) {
+      return Collections.emptyList();
+    }
 
     return softwares;
   }
