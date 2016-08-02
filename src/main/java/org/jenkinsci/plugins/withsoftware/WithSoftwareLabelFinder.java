@@ -24,7 +24,8 @@ import java.util.logging.Logger;
 @Extension
 public class WithSoftwareLabelFinder extends LabelFinder {
 
-  private final Map<Node, Set<LabelAtom>> cashedLabels = new ConcurrentHashMap<Node, Set<LabelAtom>>();
+  private final Map<Node, Set<LabelAtom>> cashedLabels
+      = new ConcurrentHashMap<Node, Set<LabelAtom>>();
 
   @Override
   public Collection<LabelAtom> findLabels(Node node) {

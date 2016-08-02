@@ -20,12 +20,12 @@ public final class XcodeDetectionTask extends SoftwareDetectionTask {
         .runExternalCommand("/usr/bin/mdfind", "kMDItemCFBundleIdentifier == 'com.apple.dt.Xcode'")
         .split("\n");
 
-    for (String xcodePath: xcodePathList) {
+    for (String path: xcodePathList) {
       String version = Utils
-          .runExternalCommand("env", "DEVELOPER_DIR=" + xcodePath, "/usr/bin/xcodebuild", "-version")
+          .runExternalCommand("env", "DEVELOPER_DIR=" + path, "/usr/bin/xcodebuild", "-version")
           .split("\n")[0].split(" ")[1];
 
-      xcodeList.add(SoftwareLabelAtom.serialize(new SoftwareLabelAtom("Xcode", version, xcodePath)));
+      xcodeList.add(SoftwareLabelAtom.serialize(new SoftwareLabelAtom("Xcode", version, path)));
     }
 
     return xcodeList;

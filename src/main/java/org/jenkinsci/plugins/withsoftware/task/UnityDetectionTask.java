@@ -20,13 +20,14 @@ public final class UnityDetectionTask extends SoftwareDetectionTask {
     String[] unityPathList = Utils
         .runExternalCommand("ls", appDir, "|", "egrep", "^Unity").split("\n");
 
-    for (String unityPath: unityPathList) {
+    for (String path: unityPathList) {
       String version = Utils
           .runExternalCommand("/usr/libexec/PlistBuddy", "-c", "Print :CFBundleVersion",
-              appDir + unityPath + "/Unity.app/Contents/Info.plist").split("\n")[0];
+              appDir + path + "/Unity.app/Contents/Info.plist").split("\n")[0];
 
-      String unityHome = appDir + unityPath + "/Unity.app";
-      unityList.add(SoftwareLabelAtom.serialize(new SoftwareLabelAtom("Unity", version, unityHome)));
+      String unityHome = appDir + path + "/Unity.app";
+      SoftwareLabelAtom label = new SoftwareLabelAtom("Unity", version, unityHome);
+      unityList.add(SoftwareLabelAtom.serialize(label));
     }
 
     return unityList;
