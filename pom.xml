@@ -74,24 +74,29 @@
               </excludes>
           </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+            <instrumentation>
+                <excludes>
+                    <exclude>**/Messages.class</exclude>
+                </excludes>
+            </instrumentation>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>cobertura</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </configuration>
+      </plugin>
     </plugins>
     <pluginManagement>
         <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.7</version>
-            <configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>cobertura</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </configuration>
-          </plugin>
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-checkstyle-plugin</artifactId>
@@ -180,6 +185,26 @@
                 <effort>Max</effort>
                 <xmlOutput>true</xmlOutput>
             </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+              <instrumentation>
+                  <excludes>
+                      <exclude>**/Messages.class</exclude>
+                  </excludes>
+              </instrumentation>
+              <executions>
+                  <execution>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>cobertura</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </configuration>
         </plugin>
       </plugins>
     </reporting>
