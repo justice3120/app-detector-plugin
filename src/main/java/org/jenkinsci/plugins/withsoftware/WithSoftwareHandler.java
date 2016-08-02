@@ -14,8 +14,8 @@ import hudson.model.queue.SubTask;
 import hudson.tasks.BuildWrapper;
 import org.jenkinsci.plugins.withsoftware.util.Utils;
 
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Extension(ordinal=-100)
