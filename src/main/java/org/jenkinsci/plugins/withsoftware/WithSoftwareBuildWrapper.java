@@ -11,11 +11,11 @@ import hudson.model.Result;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.util.ComboBoxModel;
-
 import net.sf.json.JSONObject;
 import org.jenkinsci.plugins.withsoftware.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
+
 import java.io.PrintStream;
 import java.util.Map;
 
