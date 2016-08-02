@@ -2,8 +2,6 @@ package org.jenkinsci.plugins.withsoftware;
 
 import hudson.model.labels.LabelAtom;
 
-import java.io.Serializable;
-
 public class SoftwareLabelAtom extends LabelAtom {
 
   private static final long serialVersionUID = 1L;

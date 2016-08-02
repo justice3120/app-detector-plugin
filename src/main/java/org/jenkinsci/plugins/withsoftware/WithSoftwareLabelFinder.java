@@ -1,9 +1,7 @@
 package org.jenkinsci.plugins.withsoftware;
 
 import hudson.Extension;
-import hudson.Util;
 import hudson.model.Computer;
-import hudson.model.Label;
 import hudson.model.LabelFinder;
 import hudson.model.Node;
 import hudson.model.TaskListener;
@@ -12,7 +10,6 @@ import hudson.slaves.ComputerListener;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.withsoftware.task.UnityDetectionTask;
 import org.jenkinsci.plugins.withsoftware.task.XcodeDetectionTask;
-import org.jenkinsci.plugins.withsoftware.util.Utils;
 
 import java.util.Collection;
 import java.util.Collections;

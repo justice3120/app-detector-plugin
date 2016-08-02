@@ -2,7 +2,6 @@ package org.jenkinsci.plugins.withsoftware;
 
 import hudson.Extension;
 import hudson.model.Action;
-import hudson.model.Descriptor;
 import hudson.model.Label;
 import hudson.model.ParameterValue;
 import hudson.model.ParametersAction;

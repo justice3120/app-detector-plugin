@@ -1,7 +1,5 @@
 package org.jenkinsci.plugins.withsoftware.task;
 
-import hudson.remoting.Callable;
-import jenkins.security.MasterToSlaveCallable;
 import org.jenkinsci.plugins.withsoftware.SoftwareLabelAtom;
 import org.jenkinsci.plugins.withsoftware.util.Utils;
 

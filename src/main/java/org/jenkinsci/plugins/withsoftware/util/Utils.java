@@ -1,10 +1,7 @@
 package org.jenkinsci.plugins.withsoftware.util;
 
-import hudson.EnvVars;
+
 import hudson.Util;
-import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
-import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
 import jenkins.model.Jenkins;
@@ -12,9 +9,7 @@ import org.jenkinsci.plugins.withsoftware.SoftwareLabelAtom;
 import org.jenkinsci.plugins.withsoftware.SoftwareLabelSet;
 import org.zeroturnaround.exec.ProcessExecutor;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.withsoftware;
 
-import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.Util;
@@ -9,23 +8,16 @@ import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Node;
 import hudson.model.Result;
-import hudson.model.labels.LabelAtom;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.util.ComboBoxModel;
-import hudson.util.ListBoxModel;
-import net.sf.json.JSONArray;
+
 import net.sf.json.JSONObject;
 import org.jenkinsci.plugins.withsoftware.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Extension
 public class WithSoftwareBuildWrapper extends BuildWrapper {
