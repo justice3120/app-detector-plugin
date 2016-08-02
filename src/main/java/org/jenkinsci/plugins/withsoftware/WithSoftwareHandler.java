@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Extension(ordinal=-100)
+@Extension(ordinal = -100)
 public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
   @Override
   public boolean shouldSchedule(Queue.Task p, List<Action> actions) {

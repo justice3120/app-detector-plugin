@@ -29,11 +29,11 @@ public class WithSoftwareLabelFinder extends LabelFinder {
   @Override
   public Collection<LabelAtom> findLabels(Node node) {
     Computer computer = node.toComputer();
-    if(computer == null || node.getChannel()==null)
+    if (computer == null || node.getChannel() == null)
         return Collections.emptyList();
 
     Set<LabelAtom> softwares = cashedLabels.get(node);
-    if(softwares == null || softwares.isEmpty()) return Collections.emptyList();
+    if (softwares == null || softwares.isEmpty()) return Collections.emptyList();
 
     return softwares;
   }
@@ -52,7 +52,7 @@ public class WithSoftwareLabelFinder extends LabelFinder {
     }
 
     @Override
-    public void onConfigurationChange(){
+    public void onConfigurationChange() {
       WithSoftwareLabelFinder finder = finder();
 
       Set<Node> cachedNodes = new HashSet<Node>(finder.cashedLabels.keySet());
@@ -64,8 +64,8 @@ public class WithSoftwareLabelFinder extends LabelFinder {
       }
 
       List<Node> realNodes = jenkins.getNodes();
-      for(Node node: cachedNodes){
-        if(!realNodes.contains(node)){
+      for (Node node: cachedNodes) {
+        if (!realNodes.contains(node)) {
             finder.cashedLabels.remove(node);
         }
       }
