@@ -38,6 +38,10 @@ public class Utils {
     return Util.fixEmptyAndTrim(result);
   }
 
+  /**
+   * Getting software labels from all nodes that connected to jenkins.
+   * @return all of software labels.
+   */
   public static SoftwareLabelSet getSoftwareLabels() {
     SoftwareLabelSet softwareLabels = new SoftwareLabelSet();
 
@@ -54,6 +58,11 @@ public class Utils {
     return softwareLabels;
   }
 
+  /**
+   * Getting software labels from specified node.
+   * @param node The target node.
+   * @return Software labels that assigned to given node.
+   */
   public static SoftwareLabelSet getSoftwareLabels(Node node) {
     SoftwareLabelSet softwareLabels = new SoftwareLabelSet();
 
@@ -67,6 +76,12 @@ public class Utils {
     return softwareLabels;
   }
 
+  /**
+   * Executing external command, and get output.
+   * @param command The list containing the program and its arguments.
+   * @return output string.
+   * @throws Exception Fail to execute command.
+   */
   public static String runExternalCommand(String... command) throws Exception {
     String output = new ProcessExecutor().command(command).readOutput(true).execute().outputUTF8();
     if (output == null) {
