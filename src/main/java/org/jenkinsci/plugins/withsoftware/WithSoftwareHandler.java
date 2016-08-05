@@ -2,7 +2,6 @@ package org.jenkinsci.plugins.withsoftware;
 
 import hudson.Extension;
 import hudson.matrix.Combination;
-import hudson.matrix.MatrixChildParametersAction;
 import hudson.matrix.MatrixConfiguration;
 import hudson.model.Action;
 import hudson.model.Label;
