@@ -1,6 +1,9 @@
 package org.jenkinsci.plugins.withsoftware;
 
 import hudson.Extension;
+import hudson.matrix.Combination;
+import hudson.matrix.MatrixChildParametersAction;
+import hudson.matrix.MatrixConfiguration;
 import hudson.model.Action;
 import hudson.model.Label;
 import hudson.model.ParameterValue;
@@ -16,6 +19,7 @@ import org.jenkinsci.plugins.withsoftware.util.Utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Extension(ordinal = -100)
 public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
@@ -29,7 +33,14 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
           String xcodeVersion = ((WithSoftwareBuildWrapper)bw).getXcodeVersion();
           String unityVersion = ((WithSoftwareBuildWrapper)bw).getUnityVersion();
 
-          final Map<String, String> buildVars = getBuildVariablesFromActions(actions);
+          final Map<String, String> buildVars = new TreeMap<String, String>();
+
+          if (task instanceof MatrixConfiguration) {
+            Combination combination = ((MatrixConfiguration)task).getCombination();
+            buildVars.putAll(combination);
+          }
+
+          buildVars.putAll(getBuildVariablesFromActions(actions));
 
           xcodeVersion = Utils.expandVariables(buildVars, xcodeVersion);
           unityVersion = Utils.expandVariables(buildVars, unityVersion);
