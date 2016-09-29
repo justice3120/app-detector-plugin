@@ -78,8 +78,7 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
     public Label getAssignedLabel(SubTask task) {
       Label taskLabel = task.getAssignedLabel();
 
-      if (taskLabel != null)
-      {
+      if (taskLabel != null) {
         return label.and(taskLabel);
       }
 
