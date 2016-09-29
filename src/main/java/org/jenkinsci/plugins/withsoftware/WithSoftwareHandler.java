@@ -69,14 +69,21 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
   }
 
   private static class SoftwareLabelAssignmentAction implements LabelAssignmentAction {
-    private String label;
+    private Label label;
 
     public SoftwareLabelAssignmentAction(String label) {
-      this.label = label;
+      this.label = new LabelAtom(label);
     }
 
     public Label getAssignedLabel(SubTask task) {
-      return new LabelAtom(label);
+      Label taskLabel = task.getAssignedLabel();
+
+      if (taskLabel != null)
+      {
+        return label.and(taskLabel);
+      }
+
+      return label;
     }
 
     public String getIconFileName() {
