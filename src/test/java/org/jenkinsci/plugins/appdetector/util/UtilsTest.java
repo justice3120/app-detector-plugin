@@ -6,8 +6,8 @@ import mockit.Mocked;
 import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import org.jenkinsci.plugins.appdetector.SoftwareLabelAtom;
-import org.jenkinsci.plugins.appdetector.SoftwareLabelSet;
+import org.jenkinsci.plugins.appdetector.AppLabelAtom;
+import org.jenkinsci.plugins.appdetector.AppLabelSet;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class UtilsTest {
   private Node node;
 
   @Mocked
-  private SoftwareLabelAtom label;
+  private AppLabelAtom label;
 
   @Test
   public void expandVariablesWithBuildVarToken() throws Exception {
@@ -45,7 +45,7 @@ public class UtilsTest {
 
   @Test
   public void getSoftwareLabelsWithNode() throws Exception {
-    final Set<SoftwareLabelAtom> assignedLabels = new HashSet<SoftwareLabelAtom>();
+    final Set<AppLabelAtom> assignedLabels = new HashSet<AppLabelAtom>();
     assignedLabels.add(label);
 
     new Expectations() {
@@ -55,7 +55,7 @@ public class UtilsTest {
       }
     };
 
-    SoftwareLabelSet labels = Utils.getSoftwareLabels(node);
+    AppLabelSet labels = Utils.getSoftwareLabels(node);
     assertThat(labels.size(), is(1));
     assertThat(labels, hasItem(label));
   }

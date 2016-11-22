@@ -2,7 +2,7 @@ package org.jenkinsci.plugins.appdetector.task;
 
 import groovy.lang.GroovyShell;
 import jenkins.security.MasterToSlaveCallable;
-import org.jenkinsci.plugins.appdetector.SoftwareLabelAtom;
+import org.jenkinsci.plugins.appdetector.AppLabelAtom;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 
 import java.util.Set;

@@ -95,7 +95,7 @@ public class AppDetectorLabelFinder extends LabelFinder {
           serializedSoftwares.addAll(computer.getChannel().call(new AppDetectionTask("Xcode", "")));
           serializedSoftwares.addAll(computer.getChannel().call(new AppDetectionTask("Unity", "")));
           for (String softwareString: serializedSoftwares) {
-            softwares.add(SoftwareLabelAtom.deserialize(softwareString));
+            softwares.add(AppLabelAtom.deserialize(softwareString));
           }
         }
       } catch (Exception e) {

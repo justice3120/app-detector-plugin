@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class SoftwareLabelSet extends HashSet<SoftwareLabelAtom> {
+public class AppLabelSet extends HashSet<AppLabelAtom> {
 
   /**
    * Returns a Set of xcode version strings contained in this set.
@@ -12,7 +12,7 @@ public class SoftwareLabelSet extends HashSet<SoftwareLabelAtom> {
    */
   public Set<String> getXcodeVersions() {
     Set<String> xcodeVersions = new TreeSet<String>();
-    for (SoftwareLabelAtom label: this) {
+    for (AppLabelAtom label: this) {
       if ("Xcode".equals(label.getSoftware())) {
         xcodeVersions.add(label.getVersion());
       }
@@ -26,7 +26,7 @@ public class SoftwareLabelSet extends HashSet<SoftwareLabelAtom> {
    */
   public Set<String> getUnityVersions() {
     Set<String> unityVersions = new TreeSet<String>();
-    for (SoftwareLabelAtom label: this) {
+    for (AppLabelAtom label: this) {
       if ("Unity".equals(label.getSoftware())) {
         unityVersions.add(label.getVersion());
       }
@@ -40,8 +40,8 @@ public class SoftwareLabelSet extends HashSet<SoftwareLabelAtom> {
    * @param version Software version.
    * @return The mached software label or null.
    */
-  public SoftwareLabelAtom getSoftwareLabel(String software, String version) {
-    for (SoftwareLabelAtom label: this) {
+  public AppLabelAtom getSoftwareLabel(String software, String version) {
+    for (AppLabelAtom label: this) {
       if (label.getSoftware().equals(software) && label.getVersion().equals(version)) {
         return label;
       }

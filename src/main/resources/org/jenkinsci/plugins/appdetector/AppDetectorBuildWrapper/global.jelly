@@ -1,0 +1,22 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+  <f:section title="${%App Detection}">
+
+    <f:entry title="${%App Detection Setting List}">
+       <f:repeatable header="${%Detection Setting}" var="setting" items="${instance.getDetectionSettings()}">
+         <table style="margin-left:2em">
+           <f:entry title="App Name" field="appName">
+             <f:textbox type="text" value="${setting.getAppName()}" />
+           </f:entry>
+           <f:entry title="Detection Script" field="script" help="/plugin/app-detector/help-conditionValue.html">
+             <f:textarea value="${setting.getScript()}"
+                 checkUrl="'descriptorByName/STFBuildWrapper/checkConditionValue?value='+escape(this.value)"/>
+           </f:entry>
+           <f:entry><f:repeatableDeleteButton /></f:entry>
+         </table>
+       </f:repeatable>
+    </f:entry>
+  </f:section>
+
+</j:jelly>

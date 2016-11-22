@@ -5,8 +5,8 @@ import hudson.Util;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
 import jenkins.model.Jenkins;
-import org.jenkinsci.plugins.appdetector.SoftwareLabelAtom;
-import org.jenkinsci.plugins.appdetector.SoftwareLabelSet;
+import org.jenkinsci.plugins.appdetector.AppLabelAtom;
+import org.jenkinsci.plugins.appdetector.AppLabelSet;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import java.util.HashMap;
@@ -42,8 +42,8 @@ public class Utils {
    * Getting software labels from all nodes that connected to jenkins.
    * @return all of software labels.
    */
-  public static SoftwareLabelSet getSoftwareLabels() {
-    SoftwareLabelSet softwareLabels = new SoftwareLabelSet();
+  public static AppLabelSet getSoftwareLabels() {
+    AppLabelSet softwareLabels = new AppLabelSet();
 
     Jenkins jenkins = Jenkins.getInstance();
 
@@ -63,13 +63,13 @@ public class Utils {
    * @param node The target node.
    * @return Software labels that assigned to given node.
    */
-  public static SoftwareLabelSet getSoftwareLabels(Node node) {
-    SoftwareLabelSet softwareLabels = new SoftwareLabelSet();
+  public static AppLabelSet getSoftwareLabels(Node node) {
+    AppLabelSet softwareLabels = new AppLabelSet();
 
     Set<LabelAtom> allLabels = node.getAssignedLabels();
     for (LabelAtom label: allLabels) {
-      if (label instanceof SoftwareLabelAtom) {
-        softwareLabels.add((SoftwareLabelAtom)label);
+      if (label instanceof AppLabelAtom) {
+        softwareLabels.add((AppLabelAtom)label);
       }
     }
 

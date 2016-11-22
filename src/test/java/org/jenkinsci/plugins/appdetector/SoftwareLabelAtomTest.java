@@ -4,17 +4,17 @@ import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-public class SoftwareLabelAtomTest {
-  private SoftwareLabelAtom label;
+public class AppLabelAtomTest {
+  private AppLabelAtom label;
 
   @Before
   public void init() {
-    label =new SoftwareLabelAtom("Xcode", "8.0", "/Applications/Xcode.app");
+    label =new AppLabelAtom("Xcode", "8.0", "/Applications/Xcode.app");
   }
 
   @Test
   public void serialize() throws Exception {
-    String serialized = SoftwareLabelAtom.serialize(label);
+    String serialized = AppLabelAtom.serialize(label);
     String expected = "Xcode:8.0:/Applications/Xcode.app";
 
     assertThat(serialized, is(expected));
@@ -22,8 +22,8 @@ public class SoftwareLabelAtomTest {
 
   @Test
   public void deserialize() throws Exception {
-    String serialized = SoftwareLabelAtom.serialize(label);
-    SoftwareLabelAtom deserialized = SoftwareLabelAtom.deserialize(serialized);
+    String serialized = AppLabelAtom.serialize(label);
+    AppLabelAtom deserialized = AppLabelAtom.deserialize(serialized);
 
     assertThat(deserialized.getSoftware(), is("Xcode"));
     assertThat(deserialized.getVersion(), is("8.0"));

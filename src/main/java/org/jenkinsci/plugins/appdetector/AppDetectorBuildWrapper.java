@@ -52,10 +52,10 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return null;
     }
 
-    SoftwareLabelSet labels = Utils.getSoftwareLabels(node);
+    AppLabelSet labels = Utils.getSoftwareLabels(node);
 
-    final SoftwareLabelAtom xcodeLabel = labels.getSoftwareLabel("Xcode", xcodeVersion);
-    final SoftwareLabelAtom unityLabel = labels.getSoftwareLabel("Unity", unityVersion);
+    final AppLabelAtom xcodeLabel = labels.getSoftwareLabel("Xcode", xcodeVersion);
+    final AppLabelAtom unityLabel = labels.getSoftwareLabel("Unity", unityVersion);
 
     if (xcodeVersion != null && xcodeLabel == null) {
       logger.println(Messages.XCODE_NOT_FOUND());
@@ -124,12 +124,12 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
     }
 
     public ComboBoxModel doFillXcodeVersionItems() {
-      SoftwareLabelSet labels = Utils.getSoftwareLabels();
+      AppLabelSet labels = Utils.getSoftwareLabels();
       return new ComboBoxModel(labels.getXcodeVersions());
     }
 
     public ComboBoxModel doFillUnityVersionItems() {
-      SoftwareLabelSet labels = Utils.getSoftwareLabels();
+      AppLabelSet labels = Utils.getSoftwareLabels();
       return new ComboBoxModel(labels.getUnityVersions());
     }
   }
