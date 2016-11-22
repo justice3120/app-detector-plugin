@@ -1,8 +1,8 @@
-package org.jenkinsci.plugins.withsoftware.task;
+package org.jenkinsci.plugins.appdetector.task;
 
 import mockit.Expectations;
 import mockit.Mocked;
-import org.jenkinsci.plugins.withsoftware.util.Utils;
+import org.jenkinsci.plugins.appdetector.util.Utils;
 import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;

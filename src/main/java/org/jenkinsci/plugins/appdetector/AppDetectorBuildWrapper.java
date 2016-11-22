@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware;
+package org.jenkinsci.plugins.appdetector;
 
 import hudson.Extension;
 import hudson.Launcher;
@@ -12,7 +12,7 @@ import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.util.ComboBoxModel;
 import net.sf.json.JSONObject;
-import org.jenkinsci.plugins.withsoftware.util.Utils;
+import org.jenkinsci.plugins.appdetector.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -20,17 +20,17 @@ import java.io.PrintStream;
 import java.util.Map;
 
 @Extension
-public class WithSoftwareBuildWrapper extends BuildWrapper {
+public class AppDetectorBuildWrapper extends BuildWrapper {
 
   private String xcodeVersion;
   private String unityVersion;
 
-  public WithSoftwareBuildWrapper() {
+  public AppDetectorBuildWrapper() {
     super();
   }
 
   @DataBoundConstructor
-  public WithSoftwareBuildWrapper(String xcodeVersion, String unityVersion) {
+  public AppDetectorBuildWrapper(String xcodeVersion, String unityVersion) {
     this.xcodeVersion = xcodeVersion;
     this.unityVersion = unityVersion;
   }
@@ -95,7 +95,7 @@ public class WithSoftwareBuildWrapper extends BuildWrapper {
   public static final class DescriptorImpl extends BuildWrapperDescriptor {
 
     public DescriptorImpl() {
-      super(WithSoftwareBuildWrapper.class);
+      super(AppDetectorBuildWrapper.class);
       load();
     }
 
@@ -115,7 +115,7 @@ public class WithSoftwareBuildWrapper extends BuildWrapper {
       String xcodeVersion = Util.fixEmptyAndTrim(json.getString("xcodeVersion"));
       String unityVersion = Util.fixEmptyAndTrim(json.getString("unityVersion"));
 
-      return new WithSoftwareBuildWrapper(xcodeVersion, unityVersion);
+      return new AppDetectorBuildWrapper(xcodeVersion, unityVersion);
     }
 
     @Override

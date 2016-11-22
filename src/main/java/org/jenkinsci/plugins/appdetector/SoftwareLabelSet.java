@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware;
+package org.jenkinsci.plugins.appdetector;
 
 import java.util.HashSet;
 import java.util.Set;

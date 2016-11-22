@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware.util;
+package org.jenkinsci.plugins.appdetector.util;
 
 import hudson.model.Node;
 import mockit.Expectations;
@@ -6,8 +6,8 @@ import mockit.Mocked;
 import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import org.jenkinsci.plugins.withsoftware.SoftwareLabelAtom;
-import org.jenkinsci.plugins.withsoftware.SoftwareLabelSet;
+import org.jenkinsci.plugins.appdetector.SoftwareLabelAtom;
+import org.jenkinsci.plugins.appdetector.SoftwareLabelSet;
 
 import java.util.Map;
 import java.util.HashMap;

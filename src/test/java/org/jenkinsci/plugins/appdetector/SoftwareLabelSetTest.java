@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware;
+package org.jenkinsci.plugins.appdetector;
 
 import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;

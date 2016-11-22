@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware;
+package org.jenkinsci.plugins.appdetector;
 
 import hudson.model.labels.LabelAtom;
 

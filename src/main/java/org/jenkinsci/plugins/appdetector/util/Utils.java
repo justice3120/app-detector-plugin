@@ -1,12 +1,12 @@
-package org.jenkinsci.plugins.withsoftware.util;
+package org.jenkinsci.plugins.appdetector.util;
 
 
 import hudson.Util;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
 import jenkins.model.Jenkins;
-import org.jenkinsci.plugins.withsoftware.SoftwareLabelAtom;
-import org.jenkinsci.plugins.withsoftware.SoftwareLabelSet;
+import org.jenkinsci.plugins.appdetector.SoftwareLabelAtom;
+import org.jenkinsci.plugins.appdetector.SoftwareLabelSet;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware;
+package org.jenkinsci.plugins.appdetector;
 
 import hudson.Extension;
 import hudson.matrix.Combination;
@@ -13,7 +13,7 @@ import hudson.model.labels.LabelAssignmentAction;
 import hudson.model.labels.LabelAtom;
 import hudson.model.queue.SubTask;
 import hudson.tasks.BuildWrapper;
-import org.jenkinsci.plugins.withsoftware.util.Utils;
+import org.jenkinsci.plugins.appdetector.util.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,16 +21,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @Extension(ordinal = -100)
-public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
+public class AppDetectorHandler extends Queue.QueueDecisionHandler {
   @Override
   public boolean shouldSchedule(Queue.Task task, List<Action> actions) {
     if (task instanceof Project) {
       List<BuildWrapper> buildWapperList = ((Project)task).getBuildWrappersList();
 
       for (BuildWrapper bw: buildWapperList) {
-        if (bw instanceof WithSoftwareBuildWrapper) {
-          String xcodeVersion = ((WithSoftwareBuildWrapper)bw).getXcodeVersion();
-          String unityVersion = ((WithSoftwareBuildWrapper)bw).getUnityVersion();
+        if (bw instanceof AppDetectorBuildWrapper) {
+          String xcodeVersion = ((AppDetectorBuildWrapper)bw).getXcodeVersion();
+          String unityVersion = ((AppDetectorBuildWrapper)bw).getUnityVersion();
 
           final Map<String, String> buildVars = new TreeMap<String, String>();
 

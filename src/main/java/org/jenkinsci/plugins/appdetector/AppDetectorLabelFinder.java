@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware;
+package org.jenkinsci.plugins.appdetector;
 
 import hudson.Extension;
 import hudson.model.Computer;
@@ -8,8 +8,7 @@ import hudson.model.TaskListener;
 import hudson.model.labels.LabelAtom;
 import hudson.slaves.ComputerListener;
 import jenkins.model.Jenkins;
-import org.jenkinsci.plugins.withsoftware.task.UnityDetectionTask;
-import org.jenkinsci.plugins.withsoftware.task.XcodeDetectionTask;
+import org.jenkinsci.plugins.appdetector.task.AppDetectionTask;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +21,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 @Extension
-public class WithSoftwareLabelFinder extends LabelFinder {
+public class AppDetectorLabelFinder extends LabelFinder {
 
   private final Map<Node, Set<LabelAtom>> cashedLabels
       = new ConcurrentHashMap<Node, Set<LabelAtom>>();
@@ -43,7 +42,7 @@ public class WithSoftwareLabelFinder extends LabelFinder {
   }
 
   @Extension
-  public static class WithSoftwareComputerListener extends ComputerListener {
+  public static class AppDetectorComputerListener extends ComputerListener {
 
     @Override
     public void onOnline(Computer computer, TaskListener taskListener) {
@@ -57,7 +56,7 @@ public class WithSoftwareLabelFinder extends LabelFinder {
 
     @Override
     public void onConfigurationChange() {
-      WithSoftwareLabelFinder finder = finder();
+      AppDetectorLabelFinder finder = finder();
 
       Set<Node> cachedNodes = new HashSet<Node>(finder.cashedLabels.keySet());
 
@@ -75,8 +74,8 @@ public class WithSoftwareLabelFinder extends LabelFinder {
       }
     }
 
-    private WithSoftwareLabelFinder finder() {
-      return LabelFinder.all().get(WithSoftwareLabelFinder.class);
+    private AppDetectorLabelFinder finder() {
+      return LabelFinder.all().get(AppDetectorLabelFinder.class);
     }
 
     private Set<LabelAtom> detectInstalledSoftwares(Computer computer) {
@@ -93,8 +92,8 @@ public class WithSoftwareLabelFinder extends LabelFinder {
       try {
         if (isUnix) {
           Set<String> serializedSoftwares = new HashSet<String>();
-          serializedSoftwares.addAll(computer.getChannel().call(new XcodeDetectionTask()));
-          serializedSoftwares.addAll(computer.getChannel().call(new UnityDetectionTask()));
+          serializedSoftwares.addAll(computer.getChannel().call(new AppDetectionTask("Xcode", "")));
+          serializedSoftwares.addAll(computer.getChannel().call(new AppDetectionTask("Unity", "")));
           for (String softwareString: serializedSoftwares) {
             softwares.add(SoftwareLabelAtom.deserialize(softwareString));
           }
