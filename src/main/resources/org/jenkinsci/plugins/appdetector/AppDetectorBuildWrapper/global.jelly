@@ -11,7 +11,7 @@
            </f:entry>
            <f:entry title="Detection Script" field="script" help="/plugin/app-detector/help-conditionValue.html">
              <f:textarea value="${setting.getScript()}"
-                 checkUrl="'descriptorByName/STFBuildWrapper/checkConditionValue?value='+escape(this.value)"/>
+               checkUrl="'descriptorByName/STFBuildWrapper/checkConditionValue?value='+escape(this.value)"/>
            </f:entry>
            <f:entry><f:repeatableDeleteButton /></f:entry>
          </table>

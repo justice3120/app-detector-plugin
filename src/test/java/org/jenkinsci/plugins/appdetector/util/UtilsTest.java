@@ -44,7 +44,7 @@ public class UtilsTest {
   }
 
   @Test
-  public void getSoftwareLabelsWithNode() throws Exception {
+  public void getApplicationLabelsWithNode() throws Exception {
     final Set<AppLabelAtom> assignedLabels = new HashSet<AppLabelAtom>();
     assignedLabels.add(label);
 
@@ -55,7 +55,7 @@ public class UtilsTest {
       }
     };
 
-    AppLabelSet labels = Utils.getSoftwareLabels(node);
+    AppLabelSet labels = Utils.getApplicationLabels(node);
     assertThat(labels.size(), is(1));
     assertThat(labels, hasItem(label));
   }

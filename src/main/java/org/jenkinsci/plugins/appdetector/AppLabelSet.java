@@ -13,7 +13,7 @@ public class AppLabelSet extends HashSet<AppLabelAtom> {
   public Set<String> getXcodeVersions() {
     Set<String> xcodeVersions = new TreeSet<String>();
     for (AppLabelAtom label: this) {
-      if ("Xcode".equals(label.getSoftware())) {
+      if ("Xcode".equals(label.getApplication())) {
         xcodeVersions.add(label.getVersion());
       }
     }
@@ -27,7 +27,7 @@ public class AppLabelSet extends HashSet<AppLabelAtom> {
   public Set<String> getUnityVersions() {
     Set<String> unityVersions = new TreeSet<String>();
     for (AppLabelAtom label: this) {
-      if ("Unity".equals(label.getSoftware())) {
+      if ("Unity".equals(label.getApplication())) {
         unityVersions.add(label.getVersion());
       }
     }
@@ -35,14 +35,14 @@ public class AppLabelSet extends HashSet<AppLabelAtom> {
   }
 
   /**
-   * Returns a software label that matches specified condition, or null if all labels not matched.
-   * @param software The name of software such as "Xcode", "Unity".
-   * @param version Software version.
-   * @return The mached software label or null.
+   * Returns a application label that matches specified condition, or null if all labels not matched.
+   * @param application The name of application such as "Xcode", "Unity".
+   * @param version Application version.
+   * @return The mached application label or null.
    */
-  public AppLabelAtom getSoftwareLabel(String software, String version) {
+  public AppLabelAtom getApplicationLabel(String application, String version) {
     for (AppLabelAtom label: this) {
-      if (label.getSoftware().equals(software) && label.getVersion().equals(version)) {
+      if (label.getApplication().equals(application) && label.getVersion().equals(version)) {
         return label;
       }
     }

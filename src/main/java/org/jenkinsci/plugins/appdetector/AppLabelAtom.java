@@ -6,19 +6,19 @@ public class AppLabelAtom extends LabelAtom {
 
   private static final long serialVersionUID = 1L;
 
-  private String software;
+  private String application;
   private String version;
   private String home;
 
   /**
    * Creates new {@link AppLabelAtom} instance.
-   * @param software The name of software such as "Xcode", "Unity".
-   * @param version Software version.
-   * @param home Software home directory.
+   * @param application The name of application such as "Xcode", "Unity".
+   * @param version Application version.
+   * @param home Application home directory.
    */
-  public AppLabelAtom(String software, String version, String home) {
-    super(software + "-" + version);
-    this.software = software;
+  public AppLabelAtom(String application, String version, String home) {
+    super(application + "-" + version);
+    this.application = application;
     this.version = version;
     this.home = home;
   }
@@ -29,7 +29,7 @@ public class AppLabelAtom extends LabelAtom {
    * @return Serialized string.
    */
   public static String serialize(AppLabelAtom label) {
-    String serialized = label.getSoftware() + ":" + label.getVersion() + ":" + label.getHome();
+    String serialized = label.getApplication() + ":" + label.getVersion() + ":" + label.getHome();
     return serialized;
   }
 
@@ -47,8 +47,8 @@ public class AppLabelAtom extends LabelAtom {
     return label;
   }
 
-  public String getSoftware() {
-    return software;
+  public String getApplication() {
+    return application;
   }
 
   public String getVersion() {

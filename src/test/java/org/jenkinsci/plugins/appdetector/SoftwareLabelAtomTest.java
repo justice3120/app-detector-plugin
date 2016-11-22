@@ -25,7 +25,7 @@ public class AppLabelAtomTest {
     String serialized = AppLabelAtom.serialize(label);
     AppLabelAtom deserialized = AppLabelAtom.deserialize(serialized);
 
-    assertThat(deserialized.getSoftware(), is("Xcode"));
+    assertThat(deserialized.getApplication(), is("Xcode"));
     assertThat(deserialized.getVersion(), is("8.0"));
     assertThat(deserialized.getHome(), is("/Applications/Xcode.app"));
   }

@@ -39,41 +39,41 @@ public class Utils {
   }
 
   /**
-   * Getting software labels from all nodes that connected to jenkins.
-   * @return all of software labels.
+   * Getting application labels from all nodes that connected to jenkins.
+   * @return all of application labels.
    */
-  public static AppLabelSet getSoftwareLabels() {
-    AppLabelSet softwareLabels = new AppLabelSet();
+  public static AppLabelSet getApplicationLabels() {
+    AppLabelSet applicationLabels = new AppLabelSet();
 
     Jenkins jenkins = Jenkins.getInstance();
 
     if (jenkins == null) {
-      return softwareLabels;
+      return applicationLabels;
     }
 
     List<Node> allNode = jenkins.getNodes();
     for (Node node: allNode) {
-      softwareLabels.addAll(getSoftwareLabels(node));
+      applicationLabels.addAll(getApplicationLabels(node));
     }
-    return softwareLabels;
+    return applicationLabels;
   }
 
   /**
-   * Getting software labels from specified node.
+   * Getting application labels from specified node.
    * @param node The target node.
-   * @return Software labels that assigned to given node.
+   * @return Application labels that assigned to given node.
    */
-  public static AppLabelSet getSoftwareLabels(Node node) {
-    AppLabelSet softwareLabels = new AppLabelSet();
+  public static AppLabelSet getApplicationLabels(Node node) {
+    AppLabelSet applicationLabels = new AppLabelSet();
 
     Set<LabelAtom> allLabels = node.getAssignedLabels();
     for (LabelAtom label: allLabels) {
       if (label instanceof AppLabelAtom) {
-        softwareLabels.add((AppLabelAtom)label);
+        applicationLabels.add((AppLabelAtom)label);
       }
     }
 
-    return softwareLabels;
+    return applicationLabels;
   }
 
   /**

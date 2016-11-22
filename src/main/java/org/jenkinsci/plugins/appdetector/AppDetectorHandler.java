@@ -45,10 +45,10 @@ public class AppDetectorHandler extends Queue.QueueDecisionHandler {
           unityVersion = Utils.expandVariables(buildVars, unityVersion);
 
           if (xcodeVersion != null) {
-            actions.add(new SoftwareLabelAssignmentAction("Xcode-" + xcodeVersion));
+            actions.add(new ApplicationLabelAssignmentAction("Xcode-" + xcodeVersion));
           }
           if (unityVersion != null) {
-            actions.add(new SoftwareLabelAssignmentAction("Unity-" + unityVersion));
+            actions.add(new ApplicationLabelAssignmentAction("Unity-" + unityVersion));
           }
         }
       }
@@ -68,10 +68,10 @@ public class AppDetectorHandler extends Queue.QueueDecisionHandler {
     return buildVars;
   }
 
-  private static class SoftwareLabelAssignmentAction implements LabelAssignmentAction {
+  private static class ApplicationLabelAssignmentAction implements LabelAssignmentAction {
     private Label label;
 
-    public SoftwareLabelAssignmentAction(String label) {
+    public ApplicationLabelAssignmentAction(String label) {
       this.label = new LabelAtom(label);
     }
 

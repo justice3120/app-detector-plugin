@@ -12,12 +12,15 @@ import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.util.ComboBoxModel;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONArray;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 @Extension
 public class AppDetectorBuildWrapper extends BuildWrapper {
@@ -52,10 +55,10 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return null;
     }
 
-    AppLabelSet labels = Utils.getSoftwareLabels(node);
+    AppLabelSet labels = Utils.getApplicationLabels(node);
 
-    final AppLabelAtom xcodeLabel = labels.getSoftwareLabel("Xcode", xcodeVersion);
-    final AppLabelAtom unityLabel = labels.getSoftwareLabel("Unity", unityVersion);
+    final AppLabelAtom xcodeLabel = labels.getApplicationLabel("Xcode", xcodeVersion);
+    final AppLabelAtom unityLabel = labels.getApplicationLabel("Unity", unityVersion);
 
     if (xcodeVersion != null && xcodeLabel == null) {
       logger.println(Messages.XCODE_NOT_FOUND());
@@ -94,6 +97,8 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
   @Extension
   public static final class DescriptorImpl extends BuildWrapperDescriptor {
 
+    private List<AppDetectionSetting> detectionSettings = new ArrayList<AppDetectionSetting>();
+
     public DescriptorImpl() {
       super(AppDetectorBuildWrapper.class);
       load();
@@ -106,6 +111,23 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
 
     @Override
     public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
+      detectionSettings = new ArrayList<AppDetectionSetting>();
+
+      JSONArray settingArray = json.optJSONArray("setting");
+      if (settingArray != null) {
+        for (Object settingObj: settingArray) {
+          JSONObject setting = JSONObject.fromObject(settingObj);
+          detectionSettings
+              .add(new AppDetectionSetting(setting.getString("appName"), setting.getString("script")));
+        }
+      } else {
+        JSONObject setting = json.optJSONObject("setting");
+        if (setting != null) {
+          detectionSettings
+              .add(new AppDetectionSetting(setting.getString("appName"), setting.getString("script")));
+        }
+      }
+
       save();
       return true;
     }
@@ -124,13 +146,17 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
     }
 
     public ComboBoxModel doFillXcodeVersionItems() {
-      AppLabelSet labels = Utils.getSoftwareLabels();
+      AppLabelSet labels = Utils.getApplicationLabels();
       return new ComboBoxModel(labels.getXcodeVersions());
     }
 
     public ComboBoxModel doFillUnityVersionItems() {
-      AppLabelSet labels = Utils.getSoftwareLabels();
+      AppLabelSet labels = Utils.getApplicationLabels();
       return new ComboBoxModel(labels.getUnityVersions());
+    }
+
+    public List<AppDetectionSetting> getDetectionSettings() {
+      return detectionSettings;
     }
   }
 }

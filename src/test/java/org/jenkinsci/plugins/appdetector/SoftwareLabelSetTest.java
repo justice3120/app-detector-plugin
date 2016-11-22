@@ -35,11 +35,11 @@ public class AppLabelSetTest {
   }
 
   @Test
-  public void getSoftwareLabel() throws Exception {
-    AppLabelAtom label = labels.getSoftwareLabel("Xcode", "8.0");
+  public void getApplicationLabel() throws Exception {
+    AppLabelAtom label = labels.getApplicationLabel("Xcode", "8.0");
 
     assertThat(label, notNullValue());
-    assertThat(label.getSoftware(), is("Xcode"));
+    assertThat(label.getApplication(), is("Xcode"));
     assertThat(label.getVersion(), is("8.0"));
     assertThat(label.getHome(), is("/Applications/Xcode.app"));
   }

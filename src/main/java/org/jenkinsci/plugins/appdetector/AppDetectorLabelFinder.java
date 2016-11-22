@@ -33,12 +33,12 @@ public class AppDetectorLabelFinder extends LabelFinder {
       return Collections.emptyList();
     }
 
-    Set<LabelAtom> softwares = cashedLabels.get(node);
-    if (softwares == null || softwares.isEmpty()) {
+    Set<LabelAtom> applications = cashedLabels.get(node);
+    if (applications == null || applications.isEmpty()) {
       return Collections.emptyList();
     }
 
-    return softwares;
+    return applications;
   }
 
   @Extension
@@ -46,9 +46,9 @@ public class AppDetectorLabelFinder extends LabelFinder {
 
     @Override
     public void onOnline(Computer computer, TaskListener taskListener) {
-      Set<LabelAtom> softwares = detectInstalledSoftwares(computer);
-      if (!softwares.isEmpty()) {
-        finder().cashedLabels.put(computer.getNode(), softwares);
+      Set<LabelAtom> applications = detectInstalledApplications(computer);
+      if (!applications.isEmpty()) {
+        finder().cashedLabels.put(computer.getNode(), applications);
       } else {
         finder().cashedLabels.remove(computer.getNode());
       }
@@ -78,30 +78,30 @@ public class AppDetectorLabelFinder extends LabelFinder {
       return LabelFinder.all().get(AppDetectorLabelFinder.class);
     }
 
-    private Set<LabelAtom> detectInstalledSoftwares(Computer computer) {
+    private Set<LabelAtom> detectInstalledApplications(Computer computer) {
       Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 
-      Set<LabelAtom> softwares = new HashSet<LabelAtom>();
+      Set<LabelAtom> applications = new HashSet<LabelAtom>();
       Boolean isUnix = computer.isUnix();
 
       //This computer seems offline. So, skip detection.
       if (isUnix == null) {
-        return softwares;
+        return applications;
       }
 
       try {
         if (isUnix) {
-          Set<String> serializedSoftwares = new HashSet<String>();
-          serializedSoftwares.addAll(computer.getChannel().call(new AppDetectionTask("Xcode", "")));
-          serializedSoftwares.addAll(computer.getChannel().call(new AppDetectionTask("Unity", "")));
-          for (String softwareString: serializedSoftwares) {
-            softwares.add(AppLabelAtom.deserialize(softwareString));
+          Set<String> serializedApplications = new HashSet<String>();
+          serializedApplications.addAll(computer.getChannel().call(new AppDetectionTask("Xcode", "")));
+          serializedApplications.addAll(computer.getChannel().call(new AppDetectionTask("Unity", "")));
+          for (String applicationString: serializedApplications) {
+            applications.add(AppLabelAtom.deserialize(applicationString));
           }
         }
       } catch (Exception e) {
         logger.warning(Messages.DETECTING_SOFTOWARE_INSTLLATION_FAILED(computer.getDisplayName()));
       }
-      return softwares;
+      return applications;
     }
   }
 }
