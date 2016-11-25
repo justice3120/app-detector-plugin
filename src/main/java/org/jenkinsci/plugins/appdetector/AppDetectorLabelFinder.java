@@ -82,24 +82,37 @@ public class AppDetectorLabelFinder extends LabelFinder {
       Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 
       Set<LabelAtom> applications = new HashSet<LabelAtom>();
-      Boolean isUnix = computer.isUnix();
 
+      Jenkins hudsonInstance = Jenkins.getInstance();
+      if (hudsonInstance == null) {
+        logger.warning(Messages.CANNOT_GET_HUDSON_INSTANCE());
+        return applications;
+      }
+
+      AppDetectorBuildWrapper.DescriptorImpl descriptor =
+          hudsonInstance.getDescriptorByType(AppDetectorBuildWrapper.DescriptorImpl.class);
+
+      Boolean isUnix = computer.isUnix();
       //This computer seems offline. So, skip detection.
       if (isUnix == null) {
         return applications;
       }
 
-      try {
-        if (isUnix) {
-          Set<String> serializedApplications = new HashSet<String>();
-          serializedApplications.addAll(computer.getChannel().call(new AppDetectionTask("Xcode", "")));
-          serializedApplications.addAll(computer.getChannel().call(new AppDetectionTask("Unity", "")));
-          for (String applicationString: serializedApplications) {
-            applications.add(AppLabelAtom.deserialize(applicationString));
+      for (AppDetectionSetting setting: descriptor.getDetectionSettings()) {
+        try {
+          if (isUnix) {
+            Set<String> serializedApplications = new HashSet<String>();
+            AppDetectionTask task = new AppDetectionTask(setting);
+            serializedApplications.addAll(computer.getChannel().call(task));
+            for (String applicationString: serializedApplications) {
+              applications.add(AppLabelAtom.deserialize(applicationString));
+            }
           }
+        } catch (Exception e) {
+          logger.warning(
+              Messages.DETECTING_SOFTOWARE_INSTLLATION_FAILED(setting.getAppName(), computer.getDisplayName()));
+          e.printStackTrace();
         }
-      } catch (Exception e) {
-        logger.warning(Messages.DETECTING_SOFTOWARE_INSTLLATION_FAILED(computer.getDisplayName()));
       }
       return applications;
     }

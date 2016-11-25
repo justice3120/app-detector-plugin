@@ -118,13 +118,27 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
         for (Object settingObj: settingArray) {
           JSONObject setting = JSONObject.fromObject(settingObj);
           detectionSettings
-              .add(new AppDetectionSetting(setting.getString("appName"), setting.getString("script")));
+              .add(new AppDetectionSetting(
+                  setting.getString("appName"),
+                  setting.getString("script"),
+                  setting.getBoolean("detectOnLinux"),
+                  setting.getBoolean("detectOnOsx"),
+                  setting.getBoolean("detectOnWindows"),
+                  setting.getString("homeDirVarName")
+              ));
         }
       } else {
         JSONObject setting = json.optJSONObject("setting");
         if (setting != null) {
           detectionSettings
-              .add(new AppDetectionSetting(setting.getString("appName"), setting.getString("script")));
+              .add(new AppDetectionSetting(
+                  setting.getString("appName"),
+                  setting.getString("script"),
+                  setting.getBoolean("detectOnLinux"),
+                  setting.getBoolean("detectOnOsx"),
+                  setting.getBoolean("detectOnWindows"),
+                  setting.getString("homeDirVarName")
+              ));
         }
       }
 
