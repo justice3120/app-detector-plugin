@@ -3,12 +3,19 @@
   <f:block>
     <link href="${rootURL}/plugin/app-detector/css/combo-box.css" rel="stylesheet" type="text/css" />
     <table style="margin-left:2em">
-      <f:entry title="Xcode Version: ">
-        <f:combobox field="xcodeVersion" value="${instance.getXcodeVersion()}"/>
-      </f:entry>
-      <f:entry title="Unity Version: ">
-        <f:combobox field="unityVersion" value="${instance.getUnityVersion()}"/>
-      </f:entry>
+      <f:block>
+        <f:repeatable var="setting" items="${instance.getAppUsageSettings()}">
+          <table>
+            <f:entry title="App Name" field="appName">
+              <f:select value="${setting.getAppName()}" />
+            </f:entry>
+            <f:entry title="Version" field="appVersion">
+              <f:combobox value="${setting.getVersion()}" />
+            </f:entry>
+            <f:entry><f:repeatableDeleteButton /></f:entry>
+          </table>
+        </f:repeatable>
+      </f:block>
     </table>
   </f:block>
 </j:jelly>

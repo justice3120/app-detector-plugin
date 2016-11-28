@@ -7,31 +7,30 @@ import java.util.TreeSet;
 public class AppLabelSet extends HashSet<AppLabelAtom> {
 
   /**
-   * Returns a Set of xcode version strings contained in this set.
-   * @return Xcode version set.
+   * Returns a Set of the app name strings contained in this set.
+   * @return app name set.
    */
-  public Set<String> getXcodeVersions() {
-    Set<String> xcodeVersions = new TreeSet<String>();
+  public Set<String> getAppNames() {
+    Set<String> appNames = new TreeSet<String>();
     for (AppLabelAtom label: this) {
-      if ("Xcode".equals(label.getApplication())) {
-        xcodeVersions.add(label.getVersion());
-      }
+      appNames.add(label.getApplication());
     }
-    return xcodeVersions;
+    return appNames;
   }
 
   /**
-  * Returns a Set of unity version strings contained in this set.
-  * @return Unity version set.
+   * Returns a Set of the app version strings contained in this set.
+   * @param appName The application name for which you want to obtain the version list.
+   * @return app version set.
    */
-  public Set<String> getUnityVersions() {
-    Set<String> unityVersions = new TreeSet<String>();
+  public Set<String> getAppVersions(String appName) {
+    Set<String> appVersions = new TreeSet<String>();
     for (AppLabelAtom label: this) {
-      if ("Unity".equals(label.getApplication())) {
-        unityVersions.add(label.getVersion());
+      if (appName.equals(label.getApplication())) {
+        appVersions.add(label.getVersion());
       }
     }
-    return unityVersions;
+    return appVersions;
   }
 
   /**

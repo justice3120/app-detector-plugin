@@ -8,13 +8,16 @@ import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Node;
 import hudson.model.Result;
+import jenkins.model.Jenkins;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
+import hudson.util.ListBoxModel;
 import hudson.util.ComboBoxModel;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.PrintStream;
@@ -25,17 +28,15 @@ import java.util.List;
 @Extension
 public class AppDetectorBuildWrapper extends BuildWrapper {
 
-  private String xcodeVersion;
-  private String unityVersion;
+  private List<AppUsageSetting> usageSettings;
 
   public AppDetectorBuildWrapper() {
     super();
   }
 
   @DataBoundConstructor
-  public AppDetectorBuildWrapper(String xcodeVersion, String unityVersion) {
-    this.xcodeVersion = xcodeVersion;
-    this.unityVersion = unityVersion;
+  public AppDetectorBuildWrapper(List<AppUsageSetting> usageSettings) {
+    this.usageSettings = usageSettings;
   }
 
   @Override
@@ -43,9 +44,6 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
     final PrintStream logger = listener.getLogger();
 
     final Map<String, String> buildVars = build.getBuildVariables();
-
-    String xcodeVersion = Utils.expandVariables(buildVars, this.xcodeVersion);
-    String unityVersion = Utils.expandVariables(buildVars, this.unityVersion);
 
     Node node = build.getBuiltOn();
 
@@ -55,43 +53,51 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return null;
     }
 
-    AppLabelSet labels = Utils.getApplicationLabels(node);
+    AppLabelSet allLabels = Utils.getApplicationLabels(node);
+    final List<AppLabelAtom> labels = new ArrayList<AppLabelAtom>();
 
-    final AppLabelAtom xcodeLabel = labels.getApplicationLabel("Xcode", xcodeVersion);
-    final AppLabelAtom unityLabel = labels.getApplicationLabel("Unity", unityVersion);
+    for (AppUsageSetting setting: usageSettings) {
+      String expandedVersion = Utils.expandVariables(buildVars, setting.getVersion());
+      AppLabelAtom label = allLabels.getApplicationLabel(setting.getAppName(), expandedVersion);
 
-    if (xcodeVersion != null && xcodeLabel == null) {
-      logger.println(Messages.XCODE_NOT_FOUND());
-      build.setResult(Result.NOT_BUILT);
-      return null;
-    }
+      if (label == null) {
+        logger.println(Messages.APP_NOT_FOUND(setting.getAppName(), expandedVersion, node.getNodeName()));
+        build.setResult(Result.NOT_BUILT);
+        return null;
+      }
 
-    if (unityVersion != null && unityLabel == null) {
-      logger.println(Messages.UUNITY_NOT_FOUND());
-      build.setResult(Result.NOT_BUILT);
-      return null;
+      labels.add(label);
     }
 
     return new Environment() {
       @Override
       public void buildEnvVars(Map<String, String> env) {
-        if (xcodeLabel != null) {
-          env.put("DEVELOPER_DIR", xcodeLabel.getHome());
-        }
+        Jenkins hudsonInstance = Jenkins.getInstance();
+        if (hudsonInstance != null) {
+          DescriptorImpl descriptor = hudsonInstance.getDescriptorByType(DescriptorImpl.class);
+          List<AppDetectionSetting> detectionSettings = descriptor.getDetectionSettings();
 
-        if (unityLabel != null) {
-          env.put("UNITY_HOME", unityLabel.getHome());
+          for (AppLabelAtom label: labels) {
+            String envVarName = null;
+
+            for (AppDetectionSetting setting: detectionSettings) {
+              if (label.getApplication().equals(setting.getAppName())) {
+                envVarName = setting.getHomeDirVarName();
+                break;
+              }
+            }
+
+            if (envVarName != null && !("".equals(envVarName))) {
+              env.put(envVarName, label.getHome());
+            }
+          }
         }
       }
     };
   }
 
-  public String getXcodeVersion() {
-    return xcodeVersion;
-  }
-
-  public String getUnityVersion() {
-    return unityVersion;
+  public List<AppUsageSetting> getAppUsageSettings() {
+    return usageSettings;
   }
 
   @Extension
@@ -148,10 +154,30 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
 
     @Override
     public BuildWrapper newInstance(StaplerRequest req, JSONObject json) throws FormException {
-      String xcodeVersion = Util.fixEmptyAndTrim(json.getString("xcodeVersion"));
-      String unityVersion = Util.fixEmptyAndTrim(json.getString("unityVersion"));
+      List<AppUsageSetting> usageSettings = new ArrayList<AppUsageSetting>();
 
-      return new AppDetectorBuildWrapper(xcodeVersion, unityVersion);
+      JSONArray settingArray = json.optJSONArray("setting");
+      if (settingArray != null) {
+        for (Object settingObj: settingArray) {
+          JSONObject setting = JSONObject.fromObject(settingObj);
+          usageSettings
+              .add(new AppUsageSetting(
+                  setting.getString("appName"),
+                  setting.getString("appVersion")
+              ));
+        }
+      } else {
+        JSONObject setting = json.optJSONObject("setting");
+        if (setting != null) {
+          usageSettings
+              .add(new AppUsageSetting(
+                  setting.getString("appName"),
+                  setting.getString("appVersion")
+              ));
+        }
+      }
+
+      return new AppDetectorBuildWrapper(usageSettings);
     }
 
     @Override
@@ -159,14 +185,18 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return true;
     }
 
-    public ComboBoxModel doFillXcodeVersionItems() {
+    public ListBoxModel doFillAppNameItems() {
+      ListBoxModel items = new ListBoxModel();
       AppLabelSet labels = Utils.getApplicationLabels();
-      return new ComboBoxModel(labels.getXcodeVersions());
+      for (String appName: labels.getAppNames()) {
+        items.add(appName);
+      }
+      return items;
     }
 
-    public ComboBoxModel doFillUnityVersionItems() {
+    public ComboBoxModel doFillAppVersionItems(@QueryParameter String appName) {
       AppLabelSet labels = Utils.getApplicationLabels();
-      return new ComboBoxModel(labels.getUnityVersions());
+      return new ComboBoxModel(labels.getAppVersions(appName));
     }
 
     public List<AppDetectionSetting> getDetectionSettings() {

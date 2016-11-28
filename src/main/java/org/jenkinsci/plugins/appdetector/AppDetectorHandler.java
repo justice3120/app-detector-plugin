@@ -29,8 +29,11 @@ public class AppDetectorHandler extends Queue.QueueDecisionHandler {
 
       for (BuildWrapper bw: buildWapperList) {
         if (bw instanceof AppDetectorBuildWrapper) {
-          String xcodeVersion = ((AppDetectorBuildWrapper)bw).getXcodeVersion();
-          String unityVersion = ((AppDetectorBuildWrapper)bw).getUnityVersion();
+          List<AppUsageSetting> settings = ((AppDetectorBuildWrapper)bw).getAppUsageSettings();
+
+          if (settings.isEmpty()) {
+            return true;
+          }
 
           final Map<String, String> buildVars = new TreeMap<String, String>();
 
@@ -41,15 +44,14 @@ public class AppDetectorHandler extends Queue.QueueDecisionHandler {
 
           buildVars.putAll(getBuildVariablesFromActions(actions));
 
-          xcodeVersion = Utils.expandVariables(buildVars, xcodeVersion);
-          unityVersion = Utils.expandVariables(buildVars, unityVersion);
+          ApplicationLabelAssignmentAction action = new ApplicationLabelAssignmentAction();
 
-          if (xcodeVersion != null) {
-            actions.add(new ApplicationLabelAssignmentAction("Xcode-" + xcodeVersion));
+          for (AppUsageSetting setting: settings) {
+            String expandedVersion = Utils.expandVariables(buildVars, setting.getVersion());
+
+            action.add(setting.getAppName() + "-" + expandedVersion);
           }
-          if (unityVersion != null) {
-            actions.add(new ApplicationLabelAssignmentAction("Unity-" + unityVersion));
-          }
+          actions.add(action);
         }
       }
     }
@@ -71,8 +73,8 @@ public class AppDetectorHandler extends Queue.QueueDecisionHandler {
   private static class ApplicationLabelAssignmentAction implements LabelAssignmentAction {
     private Label label;
 
-    public ApplicationLabelAssignmentAction(String label) {
-      this.label = new LabelAtom(label);
+    public ApplicationLabelAssignmentAction() {
+      this.label = null;
     }
 
     public Label getAssignedLabel(SubTask task) {
@@ -83,6 +85,14 @@ public class AppDetectorHandler extends Queue.QueueDecisionHandler {
       }
 
       return label;
+    }
+
+    public void add(String labelString) {
+      if (label == null) {
+        label = new LabelAtom(labelString);
+      } else {
+        label = label.and(new LabelAtom(labelString));
+      }
     }
 
     public String getIconFileName() {
