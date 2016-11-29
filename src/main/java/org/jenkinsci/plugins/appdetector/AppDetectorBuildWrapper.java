@@ -197,7 +197,7 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return items;
     }
 
-    public ComboBoxModel doFillAppVersionItems(@QueryParameter String appName) {
+    public ComboBoxModel doFillAppVersionItems(@QueryParameter("appName") final String appName) {
       AppLabelSet labels = Utils.getApplicationLabels();
       return new ComboBoxModel(labels.getAppVersions(appName));
     }

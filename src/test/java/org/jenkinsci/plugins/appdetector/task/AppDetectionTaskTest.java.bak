@@ -9,16 +9,16 @@ import static org.junit.Assert.*;
 
 import java.util.Set;
 
-public class UnityDetectionTaskTest {
+public class AppDetectionTaskTest {
 
-  private UnityDetectionTask task;
+  private AppDetectionTask task;
 
   @Mocked
   final Utils utils = null;
 
   @Before
   public void init() {
-    task = new UnityDetectionTask();
+    task = new AppDetectionTask();
   }
 
   @Test

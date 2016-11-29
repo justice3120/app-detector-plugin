@@ -19,19 +19,11 @@ public class AppLabelSetTest {
   }
 
   @Test
-  public void getXcodeVersions() throws Exception {
-    Set<String> xcodeVersions = labels.getXcodeVersions();
+  public void getAppVersions() throws Exception {
+    Set<String> xcodeVersions = labels.getAppVersions("Xcode");
 
     assertThat(xcodeVersions, hasItems("8.0", "7.3.1"));
     assertThat(xcodeVersions, not(anyOf(hasItems("5.4.0b24"), hasItems("5.3.5f1"))));
-  }
-
-  @Test
-  public void getUnityVersions() throws Exception {
-    Set<String> unityVersions = labels.getUnityVersions();
-
-    assertThat(unityVersions, hasItems("5.4.0b24", "5.3.5f1"));
-    assertThat(unityVersions, not(anyOf(hasItems("8.0"), hasItems("7.3.1"))));
   }
 
   @Test
