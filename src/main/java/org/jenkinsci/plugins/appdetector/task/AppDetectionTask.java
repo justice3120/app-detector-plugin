@@ -2,15 +2,27 @@ package org.jenkinsci.plugins.appdetector.task;
 
 import groovy.lang.GroovyShell;
 import jenkins.security.MasterToSlaveCallable;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.RuntimeServices;
+import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.runtime.parser.ParseException;
+import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.jenkinsci.plugins.appdetector.AppDetectionSetting;
 import org.jenkinsci.plugins.appdetector.AppLabelAtom;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
 
+import java.util.Scanner;
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.InputStream;
+import java.net.URL;
 
 public class AppDetectionTask extends MasterToSlaveCallable<Set<String>, Exception> {
   private String appName;
@@ -18,9 +30,6 @@ public class AppDetectionTask extends MasterToSlaveCallable<Set<String>, Excepti
   private boolean onLinux;
   private boolean onOsx;
   private boolean onWindows;
-
-  String DEAFULT_SCRIPT_HEADER = "import groovy.json.*\n"
-      + "import static org.jenkinsci.plugins.appdetector.util.Utils.runExternalCommand\n";
 
   public AppDetectionTask(AppDetectionSetting setting) {
     this.appName = setting.getAppName();
@@ -33,19 +42,31 @@ public class AppDetectionTask extends MasterToSlaveCallable<Set<String>, Excepti
   @Override
   public Set<String> call() throws Exception {
     Set<String> appList = new HashSet<String>();
+    String platform = getPlatform();
 
-    if (isMac()) {
+    if ("osx".equals(platform)) {
       if (! onOsx) {
         return appList;
       }
-    } else {
+    } else if ("linux".equals(platform)){
       if (! onLinux) {
         return appList;
       }
+    } else {
+      return appList;
     }
 
+    String templateString = loadTemplateFile();
+
+    StringWriter writer = new StringWriter();
+    VelocityContext context = new VelocityContext();
+    context.put("platform", platform);
+    context.put("scriptBody", scriptString);
+
+    Velocity.evaluate(context, writer, "", templateString);
+
     GroovyShell shell = new GroovyShell(this.getClass().getClassLoader());
-    groovy.lang.Script script = shell.parse(DEAFULT_SCRIPT_HEADER + scriptString);
+    groovy.lang.Script script = shell.parse(writer.toString());
     JSONArray appVersions = JSONArray.fromObject((String) script.run());
 
     for (Object appInfo: appVersions) {
@@ -56,12 +77,22 @@ public class AppDetectionTask extends MasterToSlaveCallable<Set<String>, Excepti
     return appList;
   }
 
-  private boolean isMac() {
+  private String getPlatform() {
     try {
       String uname = Utils.runExternalCommand("uname").replace("\n","");
-      return "Darwin".equals(uname);
+      if ("Darwin".equals(uname)) {
+        return "osx";
+      }
+      return "linux";
     } catch (Exception e) {
-      return false;
+      return "windows";
     }
+  }
+
+  private String loadTemplateFile() throws Exception {
+    URL templateUrl = AppDetectionTask.class.getResource("template.groovy.vm");
+    InputStream in = templateUrl.openConnection().getInputStream();
+    String templateString = new Scanner(in, "UTF-8").useDelimiter("\\A").next();
+    return templateString;
   }
 }
