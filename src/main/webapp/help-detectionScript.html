@@ -1,0 +1,26 @@
+<p>
+  Groovy script to detect which version of which application is installed for each slave.
+</p>
+<p>
+  The script MUST return a JSON string of the form:
+</p>
+<pre style="background:white;">
+[
+  {
+    "version": "Application Version",
+    "home": "Home Directory of This Version"
+  },
+  ・・・
+]
+</pre>
+<p>
+  You can use the 'runExternalCommand()' method to execute external commands and get output.</br>
+  And you can use the 'platform' variable to determine the platform in the script. ("windows", "linux", or "osx" will be stored)
+</p>
+<p>
+  Please see the example below.
+  <ul>
+    <li><a href="./plugin/app-detector/examples/Xcode.groovy">Xcode.groovy</a></li>
+    <li><a href="./plugin/app-detector/examples/Unity.groovy">Unity.grooby</a></li>
+  </ul>
+</p>

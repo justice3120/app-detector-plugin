@@ -3,13 +3,16 @@
 
   <f:section title="${%App Detection}">
 
+    <f:block>
+      <p style="margin-left:0.5em; font-weight:bold;">Note: Detection setting is not reflected until disconnecting the node and connecting it again.</p>
+    </f:block>
     <f:entry title="${%App Detection Setting List}">
       <f:repeatable header="${%Detection Setting}" var="setting" items="${instance.getDetectionSettings()}">
         <table style="margin-left:2em">
           <f:entry title="App Name" field="appName">
             <f:textbox type="text" value="${setting.getAppName()}" />
           </f:entry>
-          <f:entry title="Detection Script" field="script" help="/plugin/app-detector/help-conditionValue.html">
+          <f:entry title="Detection Script" field="script" help="/plugin/app-detector/help-detectionScript.html">
             <f:textarea value="${setting.getScript()}" />
           </f:entry>
           <f:entry title="Platform" field="platform">
@@ -20,7 +23,8 @@
             <input type="checkbox" name="detectOnWindows" value="false" disabled="disabled"/>
             <s>Windows</s>
           </f:entry>
-          <f:entry title="Variable Name of Home Directory" field="homeDirVarName">
+          <f:entry title="Variable Name of Home Directory" field="homeDirVarName"
+            help="/plugin/app-detector/help-homeDirVarName.html" >
             <f:textbox type="text" value="${setting.getHomeDirVarName()}" />
           </f:entry>
           <f:section title="${%Test Execution of Script}">
