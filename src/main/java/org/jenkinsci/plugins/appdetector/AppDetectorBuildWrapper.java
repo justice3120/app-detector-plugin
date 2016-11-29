@@ -6,16 +6,19 @@ import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.Result;
 import jenkins.model.Jenkins;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
+import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import hudson.util.ComboBoxModel;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
 import org.jenkinsci.plugins.appdetector.util.Utils;
+import org.jenkinsci.plugins.appdetector.task.AppDetectionTask;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
@@ -197,6 +200,36 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
     public ComboBoxModel doFillAppVersionItems(@QueryParameter String appName) {
       AppLabelSet labels = Utils.getApplicationLabels();
       return new ComboBoxModel(labels.getAppVersions(appName));
+    }
+
+    public ListBoxModel doFillNodeItems() {
+      ListBoxModel items = new ListBoxModel();
+
+      Computer[] allComputers = Utils.getAllComputers();
+      for (Computer computer: allComputers) {
+        items.add(computer.getDisplayName());
+      }
+      return items;
+    }
+
+    public FormValidation doTestScript(
+        @QueryParameter("script") final String script,
+        @QueryParameter("node") final String node,
+        @QueryParameter("detectOnLinux") final boolean onLinux,
+        @QueryParameter("detectOnOsx") final boolean onOsx,
+        @QueryParameter("detectOnWindows") final boolean onWindows) {
+
+      Jenkins jenkins = Jenkins.getInstance();
+      AppDetectionSetting setting = new AppDetectionSetting("Test", script, onLinux, onOsx, onWindows, "TEST");
+
+      try {
+        String fixedNodeName = "master".equals(node) ? "" : node;
+        Computer computer = jenkins.getComputer(fixedNodeName);
+        String result = computer.getChannel().call(new AppDetectionTask(setting));
+        return FormValidation.ok(result);
+      } catch (Exception e) {
+        return FormValidation.error(e, e.getMessage());
+      }
     }
 
     public List<AppDetectionSetting> getDetectionSettings() {

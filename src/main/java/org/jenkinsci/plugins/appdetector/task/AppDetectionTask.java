@@ -24,7 +24,7 @@ import java.io.StringWriter;
 import java.io.InputStream;
 import java.net.URL;
 
-public class AppDetectionTask extends MasterToSlaveCallable<Set<String>, Exception> {
+public class AppDetectionTask extends MasterToSlaveCallable<String, Exception> {
   private String appName;
   private String scriptString;
   private boolean onLinux;
@@ -40,20 +40,20 @@ public class AppDetectionTask extends MasterToSlaveCallable<Set<String>, Excepti
   }
 
   @Override
-  public Set<String> call() throws Exception {
-    Set<String> appList = new HashSet<String>();
+  public String call() throws Exception {
+    String result = "[]";
     String platform = getPlatform();
 
     if ("osx".equals(platform)) {
       if (! onOsx) {
-        return appList;
+        return result;
       }
     } else if ("linux".equals(platform)){
       if (! onLinux) {
-        return appList;
+        return result;
       }
     } else {
-      return appList;
+      return result;
     }
 
     String templateString = loadTemplateFile();
@@ -67,14 +67,9 @@ public class AppDetectionTask extends MasterToSlaveCallable<Set<String>, Excepti
 
     GroovyShell shell = new GroovyShell(this.getClass().getClassLoader());
     groovy.lang.Script script = shell.parse(writer.toString());
-    JSONArray appVersions = JSONArray.fromObject((String) script.run());
+    result = (String) script.run();
 
-    for (Object appInfo: appVersions) {
-      JSONObject info = JSONObject.fromObject(appInfo);
-      appList.add(appName + ":" + info.getString("version") + ":" + info.getString("home"));
-    }
-
-    return appList;
+    return result;
   }
 
   private String getPlatform() {

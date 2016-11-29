@@ -9,6 +9,8 @@ import hudson.model.labels.LabelAtom;
 import hudson.slaves.ComputerListener;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.appdetector.task.AppDetectionTask;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONArray;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -103,9 +105,14 @@ public class AppDetectorLabelFinder extends LabelFinder {
           if (isUnix) {
             Set<String> serializedApplications = new HashSet<String>();
             AppDetectionTask task = new AppDetectionTask(setting);
-            serializedApplications.addAll(computer.getChannel().call(task));
-            for (String applicationString: serializedApplications) {
-              applications.add(AppLabelAtom.deserialize(applicationString));
+
+            String result = computer.getChannel().call(task);
+            JSONArray appVersions = JSONArray.fromObject(result);
+
+            for (Object appInfo: appVersions) {
+              JSONObject info = JSONObject.fromObject(appInfo);
+              applications.add(
+                  new AppLabelAtom(setting.getAppName(), info.getString("version"), info.getString("home")));
             }
           }
         } catch (Exception e) {

@@ -4,28 +4,36 @@
   <f:section title="${%App Detection}">
 
     <f:entry title="${%App Detection Setting List}">
-       <f:repeatable header="${%Detection Setting}" var="setting" items="${instance.getDetectionSettings()}">
-         <table style="margin-left:2em">
-           <f:entry title="App Name" field="appName">
-             <f:textbox type="text" value="${setting.getAppName()}" />
-           </f:entry>
-           <f:entry title="Detection Script" field="script" help="/plugin/app-detector/help-conditionValue.html">
-             <f:textarea value="${setting.getScript()}" />
-           </f:entry>
-           <f:entry title="Platform" field="platform">
-             <f:checkbox name="detectOnLinux" checked="${setting.getOnLinux()}" />
-             Linux
-             <f:checkbox name="detectOnOsx" checked="${setting.getOnOsx()}" />
-             OSX
-             <input type="checkbox" name="detectOnWindows" value="false" disabled="disabled"/>
-             <s>Windows</s>
-           </f:entry>
-           <f:entry title="Variable Name of Home Directory" field="homeDirVarName">
-             <f:textbox type="text" value="${setting.getHomeDirVarName()}" />
-           </f:entry>
-           <f:entry><f:repeatableDeleteButton /></f:entry>
-         </table>
-       </f:repeatable>
+      <f:repeatable header="${%Detection Setting}" var="setting" items="${instance.getDetectionSettings()}">
+        <table style="margin-left:2em">
+          <f:entry title="App Name" field="appName">
+            <f:textbox type="text" value="${setting.getAppName()}" />
+          </f:entry>
+          <f:entry title="Detection Script" field="script" help="/plugin/app-detector/help-conditionValue.html">
+            <f:textarea value="${setting.getScript()}" />
+          </f:entry>
+          <f:entry title="Platform" field="platform">
+            <f:checkbox name="detectOnLinux" checked="${setting.getOnLinux()}" />
+            Linux
+            <f:checkbox name="detectOnOsx" checked="${setting.getOnOsx()}" />
+            OSX
+            <input type="checkbox" name="detectOnWindows" value="false" disabled="disabled"/>
+            <s>Windows</s>
+          </f:entry>
+          <f:entry title="Variable Name of Home Directory" field="homeDirVarName">
+            <f:textbox type="text" value="${setting.getHomeDirVarName()}" />
+          </f:entry>
+          <f:section title="${%Test Execution of Script}">
+              <f:block>
+              <f:entry title="Node to Run" field="node">
+                <f:select />
+              </f:entry>
+              <f:validateButton title="${%Test Script}" progress="${%Testing...}" method="testScript" with="script,node,detectOnLinux,detectOnOsx,detectOnWindows" />
+              </f:block>
+          </f:section>
+          <f:entry><f:repeatableDeleteButton /></f:entry>
+        </table>
+      </f:repeatable>
     </f:entry>
   </f:section>
 

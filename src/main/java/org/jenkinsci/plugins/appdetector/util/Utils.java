@@ -4,12 +4,14 @@ package org.jenkinsci.plugins.appdetector.util;
 import hudson.Util;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
+import hudson.model.Computer;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.appdetector.AppLabelAtom;
 import org.jenkinsci.plugins.appdetector.AppLabelSet;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +38,16 @@ public class Utils {
       result = Util.replaceMacro(result, vars);
     }
     return Util.fixEmptyAndTrim(result);
+  }
+
+  public static Computer[] getAllComputers() {
+    Jenkins jenkins = Jenkins.getInstance();
+
+    if (jenkins == null) {
+      return new Computer[0];
+    }
+
+    return jenkins.getComputers();
   }
 
   /**
