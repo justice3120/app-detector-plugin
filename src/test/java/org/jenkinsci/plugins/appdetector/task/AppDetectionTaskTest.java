@@ -46,7 +46,7 @@ public class AppDetectionTaskTest {
   }
 
   @Test
-  public void call_whenPlatformNotMatched() throws Exception {
+  public void callWhenPlatformNotMatched() throws Exception {
 
     new Expectations() {{
       Utils.runExternalCommand("uname");

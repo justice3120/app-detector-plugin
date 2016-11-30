@@ -61,7 +61,10 @@ public class Utils {
 
     Computer[] allComputers = getAllComputers();
     for (Computer computer: allComputers) {
-      applicationLabels.addAll(getApplicationLabels(computer.getNode()));
+      Node node = computer.getNode();
+      if (node != null) {
+        applicationLabels.addAll(getApplicationLabels(node));
+      }
     }
     return applicationLabels;
   }
