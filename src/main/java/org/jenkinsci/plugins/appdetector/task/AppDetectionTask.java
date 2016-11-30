@@ -36,7 +36,7 @@ public class AppDetectionTask extends MasterToSlaveCallable<String, Exception> {
       if (! onOsx) {
         return result;
       }
-    } else if ("linux".equals(platform)){
+    } else if ("linux".equals(platform)) {
       if (! onLinux) {
         return result;
       }
