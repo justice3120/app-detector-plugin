@@ -8,9 +8,9 @@ import hudson.model.TaskListener;
 import hudson.model.labels.LabelAtom;
 import hudson.slaves.ComputerListener;
 import jenkins.model.Jenkins;
-import org.jenkinsci.plugins.appdetector.task.AppDetectionTask;
-import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.jenkinsci.plugins.appdetector.task.AppDetectionTask;
 
 import java.util.Collection;
 import java.util.Collections;

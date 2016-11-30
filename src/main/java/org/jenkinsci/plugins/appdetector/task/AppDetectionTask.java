@@ -7,10 +7,10 @@ import org.apache.velocity.app.Velocity;
 import org.jenkinsci.plugins.appdetector.AppDetectionSetting;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 
-import java.util.Scanner;
-import java.io.StringWriter;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.URL;
+import java.util.Scanner;
 
 public class AppDetectionTask extends MasterToSlaveCallable<String, Exception> {
   private String appName;

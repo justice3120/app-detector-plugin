@@ -8,24 +8,24 @@ import hudson.model.BuildListener;
 import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.Result;
-import jenkins.model.Jenkins;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
+import hudson.util.ComboBoxModel;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
-import hudson.util.ComboBoxModel;
-import net.sf.json.JSONObject;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONArray;
-import org.jenkinsci.plugins.appdetector.util.Utils;
+import net.sf.json.JSONObject;
 import org.jenkinsci.plugins.appdetector.task.AppDetectionTask;
+import org.jenkinsci.plugins.appdetector.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 @Extension
 public class AppDetectorBuildWrapper extends BuildWrapper {
