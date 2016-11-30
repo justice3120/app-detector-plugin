@@ -207,7 +207,11 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
 
       Computer[] allComputers = Utils.getAllComputers();
       for (Computer computer: allComputers) {
-        items.add(computer.getDisplayName(), computer.getName());
+        if (computer.isOnline()) {
+          items.add(computer.getDisplayName(), computer.getName());
+        } else {
+          items.add(computer.getDisplayName() + "(offline)", computer.getName());
+        }
       }
       return items;
     }
