@@ -34,7 +34,8 @@ public class AppLabelSet extends HashSet<AppLabelAtom> {
   }
 
   /**
-   * Returns a application label that matches specified condition, or null if all labels not matched.
+   * Returns a application label that matches specified condition,
+   * or null if all labels not matched.
    * @param application The name of application such as "Xcode", "Unity".
    * @param version Application version.
    * @return The mached application label or null.

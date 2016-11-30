@@ -63,7 +63,8 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       AppLabelAtom label = allLabels.getApplicationLabel(setting.getAppName(), expandedVersion);
 
       if (label == null) {
-        logger.println(Messages.APP_NOT_FOUND(setting.getAppName(), expandedVersion, node.getNodeName()));
+        logger.println(Messages.APP_NOT_FOUND(setting.getAppName(),
+            expandedVersion, node.getNodeName()));
         build.setResult(Result.NOT_BUILT);
         return null;
       }
@@ -223,7 +224,8 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
         @QueryParameter("detectOnWindows") final boolean onWindows) {
 
       Jenkins jenkins = Jenkins.getInstance();
-      AppDetectionSetting setting = new AppDetectionSetting("Test", script, onLinux, onOsx, onWindows, "TEST");
+      AppDetectionSetting setting =
+          new AppDetectionSetting("Test", script, onLinux, onOsx, onWindows, "TEST");
 
       try {
         Computer computer = jenkins.getComputer(node);

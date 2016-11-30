@@ -111,12 +111,14 @@ public class AppDetectorLabelFinder extends LabelFinder {
             for (Object appInfo: appVersions) {
               JSONObject info = JSONObject.fromObject(appInfo);
               applications.add(
-                  new AppLabelAtom(setting.getAppName(), info.getString("version"), info.getString("home")));
+                  new AppLabelAtom(setting.getAppName(), info.getString("version"),
+                      info.getString("home")));
             }
           }
         } catch (Exception e) {
           logger.warning(
-              Messages.DETECTING_SOFTOWARE_INSTLLATION_FAILED(setting.getAppName(), computer.getDisplayName()));
+              Messages.DETECTING_SOFTOWARE_INSTLLATION_FAILED(setting.getAppName(),
+                  computer.getDisplayName()));
           e.printStackTrace();
         }
       }
