@@ -2,7 +2,6 @@ package org.jenkinsci.plugins.appdetector;
 
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;

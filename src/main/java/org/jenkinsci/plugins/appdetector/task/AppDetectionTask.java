@@ -2,24 +2,12 @@ package org.jenkinsci.plugins.appdetector.task;
 
 import groovy.lang.GroovyShell;
 import jenkins.security.MasterToSlaveCallable;
-import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.runtime.RuntimeServices;
-import org.apache.velocity.runtime.RuntimeSingleton;
-import org.apache.velocity.runtime.parser.ParseException;
-import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.jenkinsci.plugins.appdetector.AppDetectionSetting;
-import org.jenkinsci.plugins.appdetector.AppLabelAtom;
 import org.jenkinsci.plugins.appdetector.util.Utils;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONArray;
 
 import java.util.Scanner;
-import java.util.Set;
-import java.util.List;
-import java.util.HashSet;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.InputStream;
 import java.net.URL;
