@@ -103,7 +103,6 @@ public class AppDetectorLabelFinder extends LabelFinder {
       for (AppDetectionSetting setting: descriptor.getDetectionSettings()) {
         try {
           if (isUnix) {
-            Set<String> serializedApplications = new HashSet<String>();
             AppDetectionTask task = new AppDetectionTask(setting);
 
             String result = computer.getChannel().call(task);
