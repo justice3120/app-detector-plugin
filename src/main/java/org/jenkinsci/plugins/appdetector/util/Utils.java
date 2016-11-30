@@ -59,15 +59,9 @@ public class Utils {
   public static AppLabelSet getApplicationLabels() {
     AppLabelSet applicationLabels = new AppLabelSet();
 
-    Jenkins jenkins = Jenkins.getInstance();
-
-    if (jenkins == null) {
-      return applicationLabels;
-    }
-
-    List<Node> allNode = jenkins.getNodes();
-    for (Node node: allNode) {
-      applicationLabels.addAll(getApplicationLabels(node));
+    Computer[] allComputers = getAllComputers();
+    for (Computer computer: allComputers) {
+      applicationLabels.addAll(getApplicationLabels(computer.getNode()));
     }
     return applicationLabels;
   }
