@@ -207,7 +207,7 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
 
       Computer[] allComputers = Utils.getAllComputers();
       for (Computer computer: allComputers) {
-        items.add(computer.getDisplayName());
+        items.add(computer.getDisplayName(), computer.getName());
       }
       return items;
     }
@@ -223,8 +223,7 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       AppDetectionSetting setting = new AppDetectionSetting("Test", script, onLinux, onOsx, onWindows, "TEST");
 
       try {
-        String fixedNodeName = "master".equals(node) ? "" : node;
-        Computer computer = jenkins.getComputer(fixedNodeName);
+        Computer computer = jenkins.getComputer(node);
         String result = computer.getChannel().call(new AppDetectionTask(setting));
         return FormValidation.ok(result);
       } catch (Exception e) {
