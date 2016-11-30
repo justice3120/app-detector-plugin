@@ -23,30 +23,6 @@ public class AppLabelAtom extends LabelAtom {
     this.home = home;
   }
 
-  /**
-   * Serializing given label object to string.
-   * @param label A label object to serialize.
-   * @return Serialized string.
-   */
-  public static String serialize(AppLabelAtom label) {
-    String serialized = label.getApplication() + ":" + label.getVersion() + ":" + label.getHome();
-    return serialized;
-  }
-
-  /**
-   * Deserializing given string to label object.
-   * @param serialized A string to deserialize.
-   * @return Deserialized label object.
-   */
-  public static AppLabelAtom deserialize(String serialized) {
-    String[] list = serialized.split(":");
-    if (list.length != 3) {
-      return null;
-    }
-    AppLabelAtom label = new AppLabelAtom(list[0], list[1], list[2]);
-    return label;
-  }
-
   public String getApplication() {
     return application;
   }
