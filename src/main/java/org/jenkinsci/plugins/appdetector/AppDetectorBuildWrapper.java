@@ -227,11 +227,11 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
     /**
      * Test whether Groovy script for application detection is valid.
      * This method is called from Jenkins' Web View.
-     * @param String script Groovy script to be tested.
-     * @param String node Jenkins node name to execute script.
-     * @param String onLinux Whether to perform detection on Linux.
-     * @param String onOsx Whether to perform detection on Mac.
-     * @param String onWindows Whether to perform detection on Windows.
+     * @param script Groovy script to be tested.
+     * @param node Jenkins node name to execute script.
+     * @param onLinux Whether to perform detection on Linux.
+     * @param onOsx Whether to perform detection on Mac.
+     * @param onWindows Whether to perform detection on Windows.
      * @return test results of the script.
      */
     public FormValidation doTestScript(

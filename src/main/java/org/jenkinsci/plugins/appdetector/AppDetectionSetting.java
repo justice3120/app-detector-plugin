@@ -10,12 +10,12 @@ public class AppDetectionSetting {
 
   /**
    * Construct an AppDetectionSetting Object.
-   * @param String appName Application name to be detected.
-   * @param String script Groovy script used to detect applications.
-   * @param boolean onLinux Whether to perform detection on Linux.
-   * @param boolean onOsx Whether to perform detection on Mac.
-   * @param boolean onWindows Whether to perform detection on Windows.
-   * @param String homeDirVarName Environment variable name to bind the application's home directory.
+   * @param appName Application name to be detected.
+   * @param script Groovy script used to detect applications.
+   * @param onLinux Whether to perform detection on Linux.
+   * @param onOsx Whether to perform detection on Mac.
+   * @param onWindows Whether to perform detection on Windows.
+   * @param homeDirVarName Environment variable name to bind the application's home directory.
    */
   public AppDetectionSetting(String appName, String script, boolean onLinux, boolean onOsx,
       boolean onWindows, String homeDirVarName) {

@@ -21,7 +21,7 @@ public class AppDetectionTask extends MasterToSlaveCallable<String, Exception> {
 
   /**
    * Construct an AppDetectionTask Object.
-   * @param AppDetectionSetting setting Detection method setting.
+   * @param setting Detection method setting.
    */
   public AppDetectionTask(AppDetectionSetting setting) {
     this.appName = setting.getAppName();
