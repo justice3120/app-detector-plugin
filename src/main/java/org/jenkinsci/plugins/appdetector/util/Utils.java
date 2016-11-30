@@ -1,10 +1,9 @@
 package org.jenkinsci.plugins.appdetector.util;
 
-
 import hudson.Util;
+import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
-import hudson.model.Computer;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.appdetector.AppLabelAtom;
 import org.jenkinsci.plugins.appdetector.AppLabelSet;
