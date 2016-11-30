@@ -38,6 +38,10 @@ public class Utils {
     return Util.fixEmptyAndTrim(result);
   }
 
+  /**
+   * Get all Computers of Jenkins including master.
+   * @return List of Computer
+   */
   public static Computer[] getAllComputers() {
     Jenkins jenkins = Jenkins.getInstance();
 

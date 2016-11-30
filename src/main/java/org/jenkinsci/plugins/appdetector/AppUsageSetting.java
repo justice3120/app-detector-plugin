@@ -5,7 +5,6 @@ public class AppUsageSetting {
   private String version;
 
   public AppUsageSetting(String appName, String version) {
-
     this.appName = appName;
     this.version = version;
   }

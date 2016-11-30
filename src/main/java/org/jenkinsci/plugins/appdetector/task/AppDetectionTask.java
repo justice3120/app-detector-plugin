@@ -19,6 +19,10 @@ public class AppDetectionTask extends MasterToSlaveCallable<String, Exception> {
   private boolean onOsx;
   private boolean onWindows;
 
+  /**
+   * Construct an AppDetectionTask Object.
+   * @param AppDetectionSetting setting Detection method setting.
+   */
   public AppDetectionTask(AppDetectionSetting setting) {
     this.appName = setting.getAppName();
     this.scriptString = setting.getScript();

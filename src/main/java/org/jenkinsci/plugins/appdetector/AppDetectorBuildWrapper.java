@@ -188,6 +188,10 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return true;
     }
 
+    /**
+     * Fill in the value of the select element of the application name in Jenkins' Web view.
+     * @return List of application names.
+     */
     public ListBoxModel doFillAppNameItems() {
       ListBoxModel items = new ListBoxModel();
       AppLabelSet labels = Utils.getApplicationLabels();
@@ -202,6 +206,10 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return new ComboBoxModel(labels.getAppVersions(appName));
     }
 
+    /**
+     * Fill in the value of select element of node name in Jenkins' Web view.
+     * @return List of Jenkins node names.
+     */
     public ListBoxModel doFillNodeItems() {
       ListBoxModel items = new ListBoxModel();
 
@@ -216,6 +224,16 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
       return items;
     }
 
+    /**
+     * Test whether Groovy script for application detection is valid.
+     * This method is called from Jenkins' Web View.
+     * @param String script Groovy script to be tested.
+     * @param String node Jenkins node name to execute script.
+     * @param String onLinux Whether to perform detection on Linux.
+     * @param String onOsx Whether to perform detection on Mac.
+     * @param String onWindows Whether to perform detection on Windows.
+     * @return test results of the script.
+     */
     public FormValidation doTestScript(
         @QueryParameter("script") final String script,
         @QueryParameter("node") final String node,
