@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.withsoftware;
+package org.jenkinsci.plugins.appdetector;
 
 import hudson.Extension;
 import hudson.matrix.Combination;
@@ -13,7 +13,7 @@ import hudson.model.labels.LabelAssignmentAction;
 import hudson.model.labels.LabelAtom;
 import hudson.model.queue.SubTask;
 import hudson.tasks.BuildWrapper;
-import org.jenkinsci.plugins.withsoftware.util.Utils;
+import org.jenkinsci.plugins.appdetector.util.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,16 +21,19 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @Extension(ordinal = -100)
-public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
+public class AppDetectorHandler extends Queue.QueueDecisionHandler {
   @Override
   public boolean shouldSchedule(Queue.Task task, List<Action> actions) {
     if (task instanceof Project) {
       List<BuildWrapper> buildWapperList = ((Project)task).getBuildWrappersList();
 
       for (BuildWrapper bw: buildWapperList) {
-        if (bw instanceof WithSoftwareBuildWrapper) {
-          String xcodeVersion = ((WithSoftwareBuildWrapper)bw).getXcodeVersion();
-          String unityVersion = ((WithSoftwareBuildWrapper)bw).getUnityVersion();
+        if (bw instanceof AppDetectorBuildWrapper) {
+          List<AppUsageSetting> settings = ((AppDetectorBuildWrapper)bw).getAppUsageSettings();
+
+          if (settings.isEmpty()) {
+            return true;
+          }
 
           final Map<String, String> buildVars = new TreeMap<String, String>();
 
@@ -41,15 +44,14 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
 
           buildVars.putAll(getBuildVariablesFromActions(actions));
 
-          xcodeVersion = Utils.expandVariables(buildVars, xcodeVersion);
-          unityVersion = Utils.expandVariables(buildVars, unityVersion);
+          ApplicationLabelAssignmentAction action = new ApplicationLabelAssignmentAction();
 
-          if (xcodeVersion != null) {
-            actions.add(new SoftwareLabelAssignmentAction("Xcode-" + xcodeVersion));
+          for (AppUsageSetting setting: settings) {
+            String expandedVersion = Utils.expandVariables(buildVars, setting.getVersion());
+
+            action.add(setting.getAppName() + "-" + expandedVersion);
           }
-          if (unityVersion != null) {
-            actions.add(new SoftwareLabelAssignmentAction("Unity-" + unityVersion));
-          }
+          actions.add(action);
         }
       }
     }
@@ -68,11 +70,11 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
     return buildVars;
   }
 
-  private static class SoftwareLabelAssignmentAction implements LabelAssignmentAction {
+  private static class ApplicationLabelAssignmentAction implements LabelAssignmentAction {
     private Label label;
 
-    public SoftwareLabelAssignmentAction(String label) {
-      this.label = new LabelAtom(label);
+    public ApplicationLabelAssignmentAction() {
+      this.label = null;
     }
 
     public Label getAssignedLabel(SubTask task) {
@@ -83,6 +85,14 @@ public class WithSoftwareHandler extends Queue.QueueDecisionHandler {
       }
 
       return label;
+    }
+
+    public void add(String labelString) {
+      if (label == null) {
+        label = new LabelAtom(labelString);
+      } else {
+        label = label.and(new LabelAtom(labelString));
+      }
     }
 
     public String getIconFileName() {

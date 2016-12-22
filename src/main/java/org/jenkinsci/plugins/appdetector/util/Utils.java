@@ -1,16 +1,15 @@
-package org.jenkinsci.plugins.withsoftware.util;
-
+package org.jenkinsci.plugins.appdetector.util;
 
 import hudson.Util;
+import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
 import jenkins.model.Jenkins;
-import org.jenkinsci.plugins.withsoftware.SoftwareLabelAtom;
-import org.jenkinsci.plugins.withsoftware.SoftwareLabelSet;
+import org.jenkinsci.plugins.appdetector.AppLabelAtom;
+import org.jenkinsci.plugins.appdetector.AppLabelSet;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,41 +38,52 @@ public class Utils {
   }
 
   /**
-   * Getting software labels from all nodes that connected to jenkins.
-   * @return all of software labels.
+   * Get all Computers of Jenkins including master.
+   * @return List of Computer
    */
-  public static SoftwareLabelSet getSoftwareLabels() {
-    SoftwareLabelSet softwareLabels = new SoftwareLabelSet();
-
+  public static Computer[] getAllComputers() {
     Jenkins jenkins = Jenkins.getInstance();
 
     if (jenkins == null) {
-      return softwareLabels;
+      return new Computer[0];
     }
 
-    List<Node> allNode = jenkins.getNodes();
-    for (Node node: allNode) {
-      softwareLabels.addAll(getSoftwareLabels(node));
-    }
-    return softwareLabels;
+    return jenkins.getComputers();
   }
 
   /**
-   * Getting software labels from specified node.
-   * @param node The target node.
-   * @return Software labels that assigned to given node.
+   * Getting application labels from all nodes that connected to jenkins.
+   * @return all of application labels.
    */
-  public static SoftwareLabelSet getSoftwareLabels(Node node) {
-    SoftwareLabelSet softwareLabels = new SoftwareLabelSet();
+  public static AppLabelSet getApplicationLabels() {
+    AppLabelSet applicationLabels = new AppLabelSet();
+
+    Computer[] allComputers = getAllComputers();
+    for (Computer computer: allComputers) {
+      Node node = computer.getNode();
+      if (node != null) {
+        applicationLabels.addAll(getApplicationLabels(node));
+      }
+    }
+    return applicationLabels;
+  }
+
+  /**
+   * Getting application labels from specified node.
+   * @param node The target node.
+   * @return Application labels that assigned to given node.
+   */
+  public static AppLabelSet getApplicationLabels(Node node) {
+    AppLabelSet applicationLabels = new AppLabelSet();
 
     Set<LabelAtom> allLabels = node.getAssignedLabels();
     for (LabelAtom label: allLabels) {
-      if (label instanceof SoftwareLabelAtom) {
-        softwareLabels.add((SoftwareLabelAtom)label);
+      if (label instanceof AppLabelAtom) {
+        applicationLabels.add((AppLabelAtom)label);
       }
     }
 
-    return softwareLabels;
+    return applicationLabels;
   }
 
   /**
