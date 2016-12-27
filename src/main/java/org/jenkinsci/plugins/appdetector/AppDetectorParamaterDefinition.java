@@ -1,12 +1,9 @@
 package org.jenkinsci.plugins.appdetector;
 
-import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
-import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 import net.sf.json.JSONObject;
 import hudson.Extension;
@@ -17,7 +14,6 @@ import hudson.model.StringParameterValue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
 
