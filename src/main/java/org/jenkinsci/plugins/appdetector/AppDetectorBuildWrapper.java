@@ -47,6 +47,11 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
 
     final Map<String, String> buildVars = build.getBuildVariables();
 
+    logger.println("DEBUG: show bild vars");
+    for (Map.Entry<String, String> e : buildVars.entrySet()) {
+      logger.println(e.getKey() + " : " + e.getValue());
+    }
+
     Node node = build.getBuiltOn();
 
     if (node == null) {
