@@ -29,7 +29,8 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
     defaultValue = null;
   }
 
-  private AppDetectorParamaterDefinition(String name, String appName, String defaultValue, String description) {
+  private AppDetectorParamaterDefinition(String name, String appName, String defaultValue,
+      String description) {
     super(name, description);
     this.appName = appName;
     this.choices = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
@@ -40,7 +41,8 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
   public ParameterDefinition copyWithDefaultValue(ParameterValue defaultValue) {
     if (defaultValue instanceof StringParameterValue) {
       StringParameterValue value = (StringParameterValue) defaultValue;
-      return new AppDetectorParamaterDefinition(getName(), getAppName(), value.value, getDescription());
+      return new AppDetectorParamaterDefinition(getName(), getAppName(), value.value,
+          getDescription());
     } else {
       return this;
     }
@@ -57,14 +59,16 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
 
   @Override
   public StringParameterValue getDefaultParameterValue() {
-    return new StringParameterValue(getName(), defaultValue == null ? choices.get(0) : defaultValue, getDescription());
+    return new StringParameterValue(getName(), defaultValue == null ? choices.get(0) : defaultValue,
+        getDescription());
   }
 
   private StringParameterValue checkValue(StringParameterValue value) {
     // Update option to current version list
     choices = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
     if (!choices.contains(value.value))
-        throw new IllegalArgumentException("Illegal choice for parameter " + getName() + ": " + value.value);
+        throw new IllegalArgumentException("Illegal choice for parameter " + getName() + ": "
+            + value.value);
     return value;
   }
 
