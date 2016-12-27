@@ -66,9 +66,10 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
   private StringParameterValue checkValue(StringParameterValue value) {
     // Update option to current version list
     choices = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
-    if (!choices.contains(value.value))
+    if (!choices.contains(value.value)) {
         throw new IllegalArgumentException("Illegal choice for parameter " + getName() + ": "
             + value.value);
+    }
     return value;
   }
 
