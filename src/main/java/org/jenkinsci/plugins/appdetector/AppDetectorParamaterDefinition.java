@@ -21,6 +21,12 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
   private List<String> choices;
   private final String defaultValue;
 
+  /**
+   * Creates new {@link AppDetectorParamaterDefinition} instance.
+   * @param name Name.
+   * @param appName The name of application such as "Xcode", "Unity".
+   * @param description Description.
+   */
   @DataBoundConstructor
   public AppDetectorParamaterDefinition(String name, String appName, String description) {
     super(name, description);
