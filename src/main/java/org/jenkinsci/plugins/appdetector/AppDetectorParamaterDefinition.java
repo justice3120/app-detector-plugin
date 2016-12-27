@@ -1,16 +1,16 @@
 package org.jenkinsci.plugins.appdetector;
 
-import hudson.util.ListBoxModel;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.export.Exported;
-import org.jenkinsci.plugins.appdetector.util.Utils;
-import net.sf.json.JSONObject;
 import hudson.Extension;
-import hudson.model.SimpleParameterDefinition;
 import hudson.model.ParameterDefinition;
 import hudson.model.ParameterValue;
+import hudson.model.SimpleParameterDefinition;
 import hudson.model.StringParameterValue;
+import hudson.util.ListBoxModel;
+import net.sf.json.JSONObject;
+import org.jenkinsci.plugins.appdetector.util.Utils;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.export.Exported;
 
 import java.util.ArrayList;
 import java.util.List;
