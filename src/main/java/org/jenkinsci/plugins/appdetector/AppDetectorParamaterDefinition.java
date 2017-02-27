@@ -67,7 +67,8 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
    * @return The version list sorted in DESC
    */
   public List<String> getSortedVersionList() {
-    List<String> versionList = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
+    List<String> versionList
+        = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
     Collections.sort(versionList, new VersionComparator());
     Collections.reverse(versionList);
     return versionList;
