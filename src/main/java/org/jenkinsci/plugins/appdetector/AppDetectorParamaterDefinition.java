@@ -13,6 +13,8 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
@@ -31,7 +33,7 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
   public AppDetectorParamaterDefinition(String name, String appName, String description) {
     super(name, description);
     this.appName = appName;
-    this.choices = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
+    this.choices = getSortedVersionList();
     defaultValue = null;
   }
 
@@ -39,7 +41,7 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
       String description) {
     super(name, description);
     this.appName = appName;
-    this.choices = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
+    this.choices = getSortedVersionList();
     this.defaultValue = defaultValue;
   }
 
@@ -59,8 +61,15 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
     return appName;
   }
 
-  public List<String> getVersionList() {
-    return new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
+  /**
+   * Returns the version list sorted in DESC.
+   * @return The version list sorted in DESC
+   */
+  public List<String> getSortedVersionList() {
+    List<String> versionList = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
+    Collections.sort(versionList, new VersionComparator());
+    Collections.reverse(versionList);
+    return versionList;
   }
 
   @Override
@@ -111,4 +120,34 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
     }
   }
 
+  private class VersionComparator implements Comparator<String> {
+    public int compare(String vString1, String vString2) {
+      String[] vArray1 = vString1.split("\\.");
+      String[] vArray2 = vString2.split("\\.");
+
+      for (int i = 0; i < vArray1.length; i++) {
+        try {
+          try {
+            int num1 = Integer.parseInt(vArray1[i]);
+            int num2 = Integer.parseInt(vArray2[i]);
+
+            if (! (num1 == num2)) {
+                return (num1 - num2);
+            }
+          } catch (NumberFormatException e) {
+            String num1 = vArray1[i];
+            String num2 = vArray2[i];
+
+            if (! num1.equals(num2)) {
+                return num1.compareTo(num2);
+            }
+          }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return 1;
+        }
+      }
+
+      return (vArray1.length - vArray2.length);
+    }
+  }
 }
