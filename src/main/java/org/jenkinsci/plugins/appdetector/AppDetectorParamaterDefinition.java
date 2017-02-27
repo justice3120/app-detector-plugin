@@ -135,18 +135,18 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
             int num2 = Integer.parseInt(vArray2[i]);
 
             if (! (num1 == num2)) {
-                return (num1 - num2);
+              return (num1 - num2);
             }
           } catch (NumberFormatException e) {
             String num1 = vArray1[i];
             String num2 = vArray2[i];
 
             if (! num1.equals(num2)) {
-                return num1.compareTo(num2);
+              return num1.compareTo(num2);
             }
           }
         } catch (ArrayIndexOutOfBoundsException e) {
-            return 1;
+          return 1;
         }
       }
 
