@@ -125,22 +125,22 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
   private static class VersionComparator implements Comparator<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    public int compare(String vString1, String vString2) {
-      String[] vArray1 = vString1.split("\\.");
-      String[] vArray2 = vString2.split("\\.");
+    public int compare(String verString1, String verString2) {
+      String[] verArray1 = verString1.split("\\.");
+      String[] verArray2 = verString2.split("\\.");
 
-      for (int i = 0; i < vArray1.length; i++) {
+      for (int i = 0; i < verArray1.length; i++) {
         try {
           try {
-            int num1 = Integer.parseInt(vArray1[i]);
-            int num2 = Integer.parseInt(vArray2[i]);
+            int num1 = Integer.parseInt(verArray1[i]);
+            int num2 = Integer.parseInt(verArray2[i]);
 
             if (! (num1 == num2)) {
               return (num1 - num2);
             }
           } catch (NumberFormatException e) {
-            String num1 = vArray1[i];
-            String num2 = vArray2[i];
+            String num1 = verArray1[i];
+            String num2 = verArray2[i];
 
             if (! num1.equals(num2)) {
               return num1.compareTo(num2);
@@ -151,7 +151,7 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
         }
       }
 
-      return (vArray1.length - vArray2.length);
+      return (verArray1.length - verArray2.length);
     }
   }
 }
