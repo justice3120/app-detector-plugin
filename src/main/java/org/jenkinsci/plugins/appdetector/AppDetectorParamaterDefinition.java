@@ -120,7 +120,7 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
     }
   }
 
-  private class VersionComparator implements Comparator<String> {
+  private static class VersionComparator implements Comparator<String> {
     public int compare(String vString1, String vString2) {
       String[] vArray1 = vString1.split("\\.");
       String[] vArray2 = vString2.split("\\.");
