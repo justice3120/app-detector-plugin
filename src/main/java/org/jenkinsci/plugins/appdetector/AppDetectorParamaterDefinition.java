@@ -12,6 +12,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -120,7 +121,9 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
     }
   }
 
-  private static class VersionComparator implements Comparator<String> {
+  private static class VersionComparator implements Comparator<String>, Serializable {
+    private static final long serialVersionUID = 1L;
+
     public int compare(String vString1, String vString2) {
       String[] vArray1 = vString1.split("\\.");
       String[] vArray2 = vString2.split("\\.");
