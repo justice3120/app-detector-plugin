@@ -1,11 +1,50 @@
 Application Detector Plugin
 ====================
 
-# About
 This plugin provides the following functions.
 
- - Allows you to define arbitrary scripts to detect installation of applications in Jnekins Slave.
- - It enables you to execute the build by specifying the detected application and its version.
+ - Detects an application and its versions installed in slaves, by using a groovy script.
+ - Enables you to execute builds by specifying the detected application and its version.
 
-# Wiki
-TBD
+## Usage
+First, You need to register the detection setting on the Jenkins global setting page, as follows.
+
+![](/readme/global_config.png)
+
+And restart Jenkins, or reconnect slaves to reflect the detection setting.
+
+**NOTE: Detection setting is not reflected until disconnecting the node and connecting it again.**
+
+Then, you can specfiy some applications and versions at job setting.
+![](/readme/job_config.png)
+
+Or, Select it runtime by using "Choice Application Version" build parameter.
+![](/readme/build_parameter.png)
+
+
+### About Detection Script
+- Script MUST return a JSON string of the form:
+```json
+[
+    {
+      "version": "Application Version",
+      "home": "Home Directory of This Version"
+    },
+]
+```
+- You can use the 'runExternalCommand()' method to execute external commands and get output.  
+- And you can use the 'platform' variable to determine the platform in the script. ("windows", "linux", or "osx" will be stored)
+
+#### Sample
+Here is some sample scripts.
+
+- [Unity](/src/main/webapp/examples/Unity.groovy)
+- [Xcode](/src/main/webapp/examples/Xcode.groovy)
+
+## Licence
+
+[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+
+## Author
+
+[justice3120](https://github.com/justice3120)

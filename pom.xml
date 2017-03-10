@@ -29,7 +29,7 @@
   </properties>
 
   <name>Application Detector Plugin</name>
-  <description>TODO</description>
+  <description>Detect application versions installed in slave, And enable to execute builds on the specific slave that has an application and the version you want.</description>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
 
   <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
