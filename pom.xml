@@ -61,8 +61,17 @@
               <instrumentation>
                   <excludes>
                       <exclude>**/*Test.class</exclude>
+                      <exclude>**/Messages.class</exclude>
                   </excludes>
               </instrumentation>
+              <executions>
+                  <execution>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>cobertura</goal>
+                      </goals>
+                  </execution>
+              </executions>
           </configuration>
       </plugin>
       <plugin>
