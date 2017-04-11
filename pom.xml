@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>2.3</version>
-    <relativePath/>
+    <version>2.7</version>
+    <relativePath />
   </parent>
   <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>app-detector</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <properties>
@@ -30,7 +29,7 @@
 
   <name>Application Detector Plugin</name>
   <description>Detect application versions installed in slave, And enable to execute builds on the specific slave that has an application and the version you want.</description>
-  <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/Application+Detector+Plugin</url>
 
   <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
 
@@ -61,8 +60,17 @@
               <instrumentation>
                   <excludes>
                       <exclude>**/*Test.class</exclude>
+                      <exclude>**/Messages.class</exclude>
                   </excludes>
               </instrumentation>
+              <executions>
+                  <execution>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>cobertura</goal>
+                      </goals>
+                  </execution>
+              </executions>
           </configuration>
       </plugin>
       <plugin>
@@ -119,22 +127,22 @@
     </testResources>
   </build>
 
-  <!-- If you want this to appear on the wiki page:
   <developers>
     <developer>
-      <id>bhacker</id>
-      <name>Bob Q. Hacker</name>
-      <email>bhacker@nowhere.net</email>
+      <id>justice3120</id>
+      <name>Masayoshi Sakamoto</name>
+      <email>masayoshi.sakamoto@dena.jp</email>
+      <timezone>Asia/Tokyo</timezone>
     </developer>
   </developers>
-  -->
-  <!-- Assuming you want to host on @jenkinsci:
+
   <scm>
-    <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-    <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
+    <connection>scm:git:git://github.com/jenkinsci/app-detector-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/app-detector-plugin.git</developerConnection>
+    <url>http://github.com/jenkinsci/app-detector-plugin</url>
+    <tag>HEAD</tag>
   </scm>
-   -->
+
   <repositories>
     <repository>
       <id>repo.jenkins-ci.org</id>

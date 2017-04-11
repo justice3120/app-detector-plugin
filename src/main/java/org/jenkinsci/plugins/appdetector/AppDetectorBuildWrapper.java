@@ -203,7 +203,7 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
 
     public ComboBoxModel doFillAppVersionItems(@QueryParameter("appName") final String appName) {
       AppLabelSet labels = Utils.getApplicationLabels();
-      return new ComboBoxModel(labels.getAppVersions(appName));
+      return new ComboBoxModel(labels.getSortedAppVersions(appName));
     }
 
     /**
