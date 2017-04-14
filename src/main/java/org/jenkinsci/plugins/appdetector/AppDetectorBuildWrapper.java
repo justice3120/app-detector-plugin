@@ -242,6 +242,7 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
         @QueryParameter("detectOnWindows") final boolean onWindows) {
 
       Jenkins jenkins = Jenkins.getInstance();
+      jenkins.checkPermission(Jenkins.RUN_SCRIPTS);
       AppDetectionSetting setting =
           new AppDetectionSetting("Test", script, onLinux, onOsx, onWindows, "TEST");
 
