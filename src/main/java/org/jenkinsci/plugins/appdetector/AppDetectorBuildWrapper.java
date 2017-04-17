@@ -21,6 +21,7 @@ import org.jenkinsci.plugins.appdetector.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.interceptor.RequirePOST;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -234,6 +235,7 @@ public class AppDetectorBuildWrapper extends BuildWrapper {
      * @param onWindows Whether to perform detection on Windows.
      * @return test results of the script.
      */
+    @RequirePOST
     public FormValidation doTestScript(
         @QueryParameter("script") final String script,
         @QueryParameter("node") final String node,
