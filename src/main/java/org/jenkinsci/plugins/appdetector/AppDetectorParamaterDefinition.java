@@ -12,10 +12,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
@@ -67,22 +64,19 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
    * @return The version list sorted in DESC
    */
   public List<String> getSortedVersionList() {
-    List<String> versionList
-        = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
-    Collections.sort(versionList, new VersionComparator());
-    Collections.reverse(versionList);
-    return versionList;
+    return Utils.getApplicationLabels().getSortedAppVersions(appName);
   }
 
   @Override
   public StringParameterValue getDefaultParameterValue() {
-    return new StringParameterValue(getName(), defaultValue == null ? choices.get(0) : defaultValue,
-        getDescription());
+    // Update option to current version list
+    choices = new ArrayList<String>(Utils.getApplicationLabels().getSortedAppVersions(appName));
+    return new StringParameterValue(getName(), choices.get(0), getDescription());
   }
 
   private StringParameterValue checkValue(StringParameterValue value) {
     // Update option to current version list
-    choices = new ArrayList<String>(Utils.getApplicationLabels().getAppVersions(appName));
+    choices = new ArrayList<String>(Utils.getApplicationLabels().getSortedAppVersions(appName));
     if (!choices.contains(value.value)) {
       throw new IllegalArgumentException("Illegal choice for parameter " + getName() + ": "
           + value.value);
@@ -119,39 +113,6 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
         items.add(appName);
       }
       return items;
-    }
-  }
-
-  private static class VersionComparator implements Comparator<String>, Serializable {
-    private static final long serialVersionUID = 1L;
-
-    public int compare(String verString1, String verString2) {
-      String[] verArray1 = verString1.split("\\.");
-      String[] verArray2 = verString2.split("\\.");
-
-      for (int i = 0; i < verArray1.length; i++) {
-        try {
-          try {
-            int num1 = Integer.parseInt(verArray1[i]);
-            int num2 = Integer.parseInt(verArray2[i]);
-
-            if (! (num1 == num2)) {
-              return (num1 - num2);
-            }
-          } catch (NumberFormatException e) {
-            String num1 = verArray1[i];
-            String num2 = verArray2[i];
-
-            if (! num1.equals(num2)) {
-              return num1.compareTo(num2);
-            }
-          }
-        } catch (ArrayIndexOutOfBoundsException e) {
-          return 1;
-        }
-      }
-
-      return (verArray1.length - verArray2.length);
     }
   }
 }
