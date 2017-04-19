@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.*;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,11 +35,11 @@ public class AppDetectorParamaterDefinitionTest {
       Utils.getApplicationLabels();
       result = labels;
 
-      labels.getAppVersions("test");
-      result = new HashSet<String>() {
+      labels.getSortedAppVersions("test");
+      result = new ArrayList<String>() {
         {
-          add("8.3");
           add("8.3.1b");
+          add("8.3");
           add("8");
         }
       };
