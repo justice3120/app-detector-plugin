@@ -1,5 +1,4 @@
 import groovy.json.*;
-import static org.jenkinsci.plugins.appdetector.util.Utils.runExternalCommand;
 
 def platform = "${platform}";
 
