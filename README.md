@@ -32,7 +32,7 @@ Or, Select it runtime by using "Choice Application Version" build parameter.
     },
 ]
 ```
-- You can use the 'runExternalCommand()' method to execute external commands and get output.  
+- You can use the '[cmd, arg1, arg2 ...].execute().text' method to execute external commands and get output.  
 - And you can use the 'platform' variable to determine the platform in the script. ("windows", "linux", or "osx" will be stored)
 
 #### Sample
