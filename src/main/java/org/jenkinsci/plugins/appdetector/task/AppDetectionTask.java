@@ -45,7 +45,9 @@ public class AppDetectionTask extends MasterToSlaveCallable<String, Exception> {
         return result;
       }
     } else {
-      return result;
+      if (! onWindows) {
+        return result;
+      }
     }
 
     String templateString = loadTemplateFile();
