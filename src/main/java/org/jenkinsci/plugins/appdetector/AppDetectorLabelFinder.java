@@ -102,18 +102,16 @@ public class AppDetectorLabelFinder extends LabelFinder {
 
       for (AppDetectionSetting setting: descriptor.getDetectionSettings()) {
         try {
-          if (isUnix) {
-            AppDetectionTask task = new AppDetectionTask(setting);
+          AppDetectionTask task = new AppDetectionTask(setting);
 
-            String result = computer.getChannel().call(task);
-            JSONArray appVersions = JSONArray.fromObject(result);
+          String result = computer.getChannel().call(task);
+          JSONArray appVersions = JSONArray.fromObject(result);
 
-            for (Object appInfo: appVersions) {
-              JSONObject info = JSONObject.fromObject(appInfo);
-              applications.add(
-                  new AppLabelAtom(setting.getAppName(), info.getString("version"),
-                      info.getString("home")));
-            }
+          for (Object appInfo: appVersions) {
+            JSONObject info = JSONObject.fromObject(appInfo);
+            applications.add(
+                new AppLabelAtom(setting.getAppName(), info.getString("version"),
+                    info.getString("home")));
           }
         } catch (Exception e) {
           logger.warning(

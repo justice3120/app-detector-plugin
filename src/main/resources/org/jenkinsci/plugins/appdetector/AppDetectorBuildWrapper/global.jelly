@@ -20,8 +20,8 @@
             Linux
             <f:checkbox name="detectOnOsx" checked="${setting.getOnOsx()}" />
             OSX
-            <input type="checkbox" name="detectOnWindows" value="false" disabled="disabled"/>
-            <s>Windows</s>
+            <f:checkbox name="detectOnWindows" checked="${setting.getOnWindows()}" />
+            Windows
           </f:entry>
           <f:entry title="Variable Name of Home Directory" field="homeDirVarName"
             help="/plugin/app-detector/help-homeDirVarName.html" >
