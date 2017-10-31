@@ -5,10 +5,12 @@ import hudson.model.ParameterDefinition;
 import hudson.model.ParameterValue;
 import hudson.model.SimpleParameterDefinition;
 import hudson.model.StringParameterValue;
+import hudson.util.ComboBoxModel;
 import hudson.util.ListBoxModel;
 import net.sf.json.JSONObject;
 import org.jenkinsci.plugins.appdetector.util.Utils;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
@@ -27,7 +29,7 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
    * @param appName The name of application such as "Xcode", "Unity".
    * @param description Description.
    */
-  @DataBoundConstructor
+  //@DataBoundConstructor
   public AppDetectorParamaterDefinition(String name, String appName, String description) {
     super(name, description);
     this.appName = appName;
@@ -35,7 +37,15 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
     defaultValue = null;
   }
 
-  private AppDetectorParamaterDefinition(String name, String appName, String defaultValue,
+  /**
+   * Creates new {@link AppDetectorParamaterDefinition} instance.
+   * @param name Name.
+   * @param appName The name of application such as "Xcode", "Unity".
+   * @param defaultValue Default version of this application.
+   * @param description Description.
+   */
+  @DataBoundConstructor
+  public AppDetectorParamaterDefinition(String name, String appName, String defaultValue,
       String description) {
     super(name, description);
     this.appName = appName;
@@ -59,6 +69,11 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
     return appName;
   }
 
+  @Exported
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
   /**
    * Returns the version list sorted in DESC.
    * @return The version list sorted in DESC
@@ -71,7 +86,11 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
   public StringParameterValue getDefaultParameterValue() {
     // Update option to current version list
     choices = new ArrayList<String>(Utils.getApplicationLabels().getSortedAppVersions(appName));
-    return new StringParameterValue(getName(), choices.get(0), getDescription());
+    if (choices.contains(defaultValue)) {
+      return new StringParameterValue(getName(), defaultValue, getDescription());
+    } else {
+      return new StringParameterValue(getName(), choices.get(0), getDescription());
+    }
   }
 
   private StringParameterValue checkValue(StringParameterValue value) {
@@ -113,6 +132,11 @@ public class AppDetectorParamaterDefinition extends SimpleParameterDefinition {
         items.add(appName);
       }
       return items;
+    }
+
+    public ComboBoxModel doFillDefaultValueItems(@QueryParameter("appName") final String appName) {
+      AppLabelSet labels = Utils.getApplicationLabels();
+      return new ComboBoxModel(labels.getSortedAppVersions(appName));
     }
   }
 }

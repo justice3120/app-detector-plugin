@@ -8,6 +8,9 @@
   <f:entry title="${%App Name}" field="appName">
     <f:select value="${instance.appName}" />
   </f:entry>
+  <f:entry title="${%Default Version}" field="defaultValue">
+    <f:combobox value="${instance.defaultValue}" />
+  </f:entry>
   <f:entry title="${%Description}" help="/help/parameter/description.html">
     <f:textarea name="parameter.description" value="${instance.description}" codemirror-mode="${app.markupFormatter.codeMirrorMode}" codemirror-config="${app.markupFormatter.codeMirrorConfig}" previewEndpoint="/markupFormatter/previewDescription" />
   </f:entry>
